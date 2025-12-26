@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react'; // You'll need to install lucide-react: npm i lucide-react
 import Loader from '../Components/Loader';
 import ReviewSec from '../Components/Home/About';
 import KeyFindings from '../Components/Home/Marquee';
@@ -16,6 +17,7 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
   const [logos, setLogos] = useState([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const logoData = [
     { name: '338 Autocalls Analysed', angle: 15 },
@@ -35,13 +37,11 @@ const Home = () => {
   ];
 
   useEffect(() => {
-    // Loader for 5 seconds
     const timer = setTimeout(() => setIsLoading(false), 5000);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    // Animate dropping logos
     const shuffled = [...logoData].sort(() => Math.random() - 0.5);
     shuffled.forEach((logo, index) => {
       const delay = index * 300 + Math.random() * 400;
@@ -65,6 +65,8 @@ const Home = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setActiveSection(sectionId);
+      // Close mobile menu after click
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -105,9 +107,63 @@ const Home = () => {
 
   return (
     <>
-      {/* HERO SECTION WITH ANIMATED BACKGROUND & DROPPING LOGOS */}
+      {/* MOBILE SIDEBAR MENU */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden"
+            />
+
+            {/* Sidebar */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              className="fixed left-0 top-0 h-full w-72 bg-black/90 backdrop-blur-xl shadow-2xl z-50 lg:hidden flex flex-col"
+            >
+              <div className="p-6 flex justify-between items-center border-b border-white/10">
+                <img src="/logow.png" alt="Logo" className="h-10" />
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-white hover:text-[#01a96b] transition"
+                >
+                  <X size={28} />
+                </button>
+              </div>
+
+              <nav className="flex-1 p-6">
+                <ul className="space-y-4">
+                  {navItems.map((item) => (
+                    <li key={item.id}>
+                      <button
+                        onClick={() => scrollToSection(item.id)}
+                        className={`w-full text-left text-lg font-medium transition-colors ${
+                          activeSection === item.id
+                            ? 'text-[#01a96b]'
+                            : 'text-white/80 hover:text-white'
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* HERO SECTION */}
       <section id="overview" className="relative w-full min-h-screen overflow-hidden">
-        {/* Background Image */}
+        {/* Background */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
@@ -116,7 +172,7 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-black/50" />
 
-        {/* Animated Gradient Overlay */}
+        {/* Animated Gradient & Grid */}
         <div className="absolute inset-0">
           <motion.div
             className="absolute inset-0 bg-gradient-to-br from-[#0b3d62]/80 via-[#0f4a75]/80 to-[#0b3d62]/80"
@@ -124,7 +180,6 @@ const Home = () => {
             transition={{ duration: 20, repeat: Infinity, repeatType: 'reverse' }}
           />
 
-          {/* Grid Pattern */}
           <div className="absolute inset-0 opacity-40">
             {Array(20)
               .fill()
@@ -151,11 +206,19 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Header Logo */}
-        <header className="absolute top-0 left-0 right-0 flex justify-between items-center p-6 z-30">
-          <div className="flex items-center gap-3 p-2 rounded-lg">
+        {/* Header with Hamburger (Mobile) / Logo */}
+        <header className="absolute top-0 left-0 right-0 flex justify-between items-center p-6 z-40">
+          <div className="flex items-center gap-3">
             <img src="/logow.png" alt="Company Logo" className="h-10 md:h-14" />
           </div>
+
+          {/* Hamburger Button - Mobile Only */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="lg:hidden text-white hover:text-[#01a96b] transition"
+          >
+            <Menu size={32} />
+          </button>
         </header>
 
         {/* Dropping Logos - Desktop */}
@@ -170,33 +233,33 @@ const Home = () => {
             custom={logo}
           >
             <motion.div
-  className="rounded-full flex items-center justify-center shadow-2xl border-4 border-[#337543] bg-[#337543] overflow-hidden"
-  style={{ width: '160px', height: '160px' }}
-  whileHover={{
-    scale: 1.2,
-    y: -10,
-    boxShadow: '0 0 40px rgba(1, 169, 107, 0.8)',
-    borderColor: '#01ff8a',
-  }}
-  animate={{
-    y: [0, -15, 0],                  // gentle floating up and down
-    boxShadow: [
-      '0 0 20px rgba(1, 169, 107, 0.4)',
-      '0 0 35px rgba(1, 169, 107, 0.7)',
-      '0 0 20px rgba(1, 169, 107, 0.4)',
-    ],
-  }}
-  transition={{
-    duration: 4,
-    repeat: Infinity,
-    repeatType: 'reverse',
-    ease: 'easeInOut',
-  }}
->
-  <span className="text-lg md:text-xl font-black text-white text-center leading-tight px-6">
-    {logo.name}
-  </span>
-</motion.div>
+              className="rounded-full flex items-center justify-center shadow-2xl border-4 border-[#337543] bg-[#337543] overflow-hidden"
+              style={{ width: '160px', height: '160px' }}
+              whileHover={{
+                scale: 1.2,
+                y: -10,
+                boxShadow: '0 0 40px rgba(1, 169, 107, 0.8)',
+                borderColor: '#01ff8a',
+              }}
+              animate={{
+                y: [0, -15, 0],
+                boxShadow: [
+                  '0 0 20px rgba(1, 169, 107, 0.4)',
+                  '0 0 35px rgba(1, 169, 107, 0.7)',
+                  '0 0 20px rgba(1, 169, 107, 0.4)',
+                ],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                repeatType: 'reverse',
+                ease: 'easeInOut',
+              }}
+            >
+              <span className="text-lg md:text-xl font-black text-white text-center leading-tight px-6">
+                {logo.name}
+              </span>
+            </motion.div>
           </motion.div>
         ))}
 
@@ -223,7 +286,7 @@ const Home = () => {
           </motion.div>
         ))}
 
-        {/* Main Hero Content */}
+        {/* Hero Content */}
         <div className="h-screen flex flex-col items-center justify-center text-center px-6 relative z-10">
           <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto">
             <motion.h1
@@ -258,8 +321,8 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Functional Navbar */}
-        <nav className="fixed z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
+        {/* Desktop/Tablet Navbar (Hidden on Mobile) */}
+            <nav className=" hidden lg:block fixed z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {navItems.map((item) => (
               <motion.button
@@ -284,7 +347,7 @@ const Home = () => {
         </nav>
       </section>
 
-      {/* OTHER SECTIONS WITH IDs */}
+      {/* OTHER SECTIONS */}
       <section id="review"><ReviewSec /></section>
       <section id="findings"><KeyFindings /></section>
       <section id="competencies"><CompetenciesSection /></section>
@@ -293,7 +356,7 @@ const Home = () => {
       </section>
       <section id="how-it-works"><HowAutocallsWorkSection /></section>
       <section id="about"><AboutSection /></section>
-      <TestimonialSection/>
+      <TestimonialSection />
       <section id="contact"><ContactDes /></section>
 
       {/* Performance Modal */}

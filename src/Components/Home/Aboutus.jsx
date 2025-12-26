@@ -15,7 +15,7 @@ export default function AboutSection() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-tight text-white mb-12"
             >
-              About Autocalls.uk
+              About Autocalls
             </motion.h2>
 
             <motion.p

@@ -327,7 +327,7 @@ const Home = () => {
         </div>
 
         <div className="h-screen flex flex-col items-center justify-center text-center px-6 relative z-20">
-          <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto mb-30">
+<div className="space-y-6 md:space-y-8 max-w-5xl mx-auto mb-0 md:mb-30">
             <motion.h1
               custom={0}
               variants={titleVariants}

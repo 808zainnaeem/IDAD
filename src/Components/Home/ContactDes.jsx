@@ -5,7 +5,7 @@ export default function ContactDes() {
     <div className="min-h-screen bg-[#0b3d62] flex items-center justify-center px-6 py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="max-w-6xl mx-auto text-center">
         {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light leading-tight mb-12 md:mb-16 text-white">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light leading-tight mb-12 md:mb-16 text-white">
           <motion.span
             initial={{ opacity: 0, y: 80 }}
             whileInView={{ opacity: 1, y: 0 }}

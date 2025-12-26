@@ -7,6 +7,7 @@ import Quote from '../Components/Home/Quote';
 import TestimonialSection from '../Components/Home/Testiminal';
 import ContactDes from '../Components/Home/ContactDes';
 import Loader from '../Components/Loader';
+import ContentBox from '../Components/Home/ContentBox';
 
 
 
@@ -33,6 +34,7 @@ const Home = () => {
           <AristoLandingPage />
           <Marquee />
           <CompetenciesSection />
+          <ContentBox/>
           <Quote />
           <TestimonialSection />
           <ContactDes />

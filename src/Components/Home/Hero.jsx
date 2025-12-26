@@ -15,10 +15,8 @@ export default function AutocallLanding() {
 
   useEffect(() => {
     const shuffled = [...logoData].sort(() => Math.random() - 0.5);
-
     shuffled.forEach((logo, index) => {
       const delay = index * 300 + Math.random() * 400;
-
       setTimeout(() => {
         setLogos((prev) => [
           ...prev,
@@ -65,20 +63,36 @@ export default function AutocallLanding() {
     }),
   };
 
+  const navItems = [
+    { label: 'Overview', active: true },
+    { label: 'The Review', active: false },
+    { label: 'Key Findings', active: false },
+    { label: 'Performance', active: false },
+    { label: 'How Autocalls Work', active: false },
+    { label: 'About', active: false },
+    { label: 'Contact', active: false },
+  ];
+
   return (
-    <div
-      className="relative w-full min-h-screen overflow-hidden"
-      style={{ backgroundColor: '#0b3d62' }}
-    >
+    <div className="relative w-full min-h-screen overflow-hidden">
+      {/* Background Image with Black Overlay */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('https://assets.weforum.org/article/image/responsive_big_88hn1MXZpFiLa4BcyfaqpyV-Q3l6j3i-GRb1Xfdb0mw.jpg')`,
+        }}
+      />
+      <div className="absolute inset-0 bg-black/50" /> {/* Black overlay with 50% opacity */}
+
       <div className="absolute inset-0">
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-[#0b3d62] via-[#0f4a75] to-[#0b3d62]"
+          className="absolute inset-0 bg-gradient-to-br from-[#0b3d62]/80 via-[#0f4a75]/80 to-[#0b3d62]/80"
           animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
           transition={{ duration: 20, repeat: Infinity, repeatType: 'reverse' }}
         />
 
-        {/* Fixed Animated Grid Pattern - Now pulses gently without disappearing */}
-        <div className="absolute inset-0 opacity-50">
+        {/* Fixed Animated Grid Pattern */}
+        <div className="absolute inset-0 opacity-40">
           {Array(20)
             .fill()
             .map((_, i) => (
@@ -125,7 +139,7 @@ export default function AutocallLanding() {
       {logos.map((logo) => (
         <motion.div
           key={logo.id}
-          className="absolute pointer-events-none hidden lg:block z-1000"
+          className="absolute pointer-events-none hidden lg:block z-10"
           style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
           variants={dropVariants}
           initial="initial"
@@ -173,14 +187,14 @@ export default function AutocallLanding() {
       <div className="absolute top-[30%] right-10 h-[40%] w-[1px] bg-[#01a96b]/20 z-0 hidden md:block"></div>
 
       {/* MAIN CONTENT */}
-      <div className="h-screen flex flex-col items-center justify-center text-center px-6 pointer-events-none relative ">
+      <div className="h-screen flex flex-col items-center justify-center text-center px-6 pointer-events-none relative z-10">
         <div className="space-y-4 md:space-y-6 max-w-6xl mx-auto">
           <motion.h1
             custom={0}
             variants={titleVariants}
             initial="hidden"
             animate="visible"
-className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-white tracking-tight leading-none mt-0 sm:mt-[-120px]"
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-white tracking-tight leading-none mt-0 sm:mt-[-120px]"
           >
             Consistent Returns
           </motion.h1>
@@ -191,17 +205,8 @@ className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-white tr
             animate="visible"
             className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-[#01a96b] tracking-tight leading-none"
           >
-             in Volatile Markets.
+            in Volatile Markets.
           </motion.h2>
-          <motion.h3
-            custom={2}
-            variants={titleVariants}
-            initial="hidden"
-            animate="visible"
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-white tracking-tight leading-none"
-          >
-           
-          </motion.h3>
         </div>
       </div>
 
@@ -210,6 +215,29 @@ className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-white tr
         className="absolute bottom-20 right-[-40px] w-[880px] h-[1px] bg-[#01a96b]/15 pointer-events-none z-0 hidden md:block"
         style={{ transform: 'rotate(-35deg)', transformOrigin: 'center' }}
       ></div>
+
+      {/* UPDATED BOTTOM/TOP NAV with Circle Hover Effect */}
+      <nav className="fixed bottom-4  translate-x-1/2   md:w-auto md:top-10 md:bottom-auto md:left-auto md:right-10 md:translate-x-0 flex flex-wrap justify-center gap-4 md:gap-8 z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl">
+        {navItems.map((item) => (
+          <motion.button
+            key={item.label}
+            className={`relative px-6 py-3 text-[10px]  font-medium transition-colors ${
+              item.active ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
+            }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {/* Circle background on hover/active */}
+            <motion.span
+              className="absolute inset-0 rounded-full bg-white/10"
+              initial={{ scale: 0, opacity: 0 }}
+              whileHover={{ scale: 1.3, opacity: 1 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            />
+            <span className="relative z-10">{item.label.toUpperCase()}</span>
+          </motion.button>
+        ))}
+      </nav>
     </div>
   );
 }

@@ -5,12 +5,11 @@ export default function AutocallLanding() {
   const [logos, setLogos] = useState([]);
 
   const logoData = [
-    { name: 'HSBC', angle: 15 },
-    { name: 'MORGAN\nSTANLEY', angle: -20 },
-    { name: 'CITIGROUP', angle: 0 },
-    { name: 'BNP\nPARIBAS', angle: 25 },
-    { name: 'BARCLAYS', angle: -15 },
-    { name: 'FTSE\n100', angle: 10 },
+    { name: '338 Autocalls Analysed', angle: 15 },
+    { name: '100% Positive Outcomes in 2025', angle: -20 },
+    { name: '7.85% Average Annualised Return', angle: 0 },
+    { name: '1.98 Year Average Term', angle: 25 },
+
   ];
 
   useEffect(() => {
@@ -39,7 +38,7 @@ export default function AutocallLanding() {
       rotate: (custom) => custom.rotateStart || 0,
     },
     animate: (custom) => ({
-      y: window.innerHeight - 280,
+      y: window.innerHeight - 220,
       opacity: 1,
       rotate: custom.rotateEnd,
       transition: {
@@ -82,7 +81,7 @@ export default function AutocallLanding() {
           backgroundImage: `url('https://assets.weforum.org/article/image/responsive_big_88hn1MXZpFiLa4BcyfaqpyV-Q3l6j3i-GRb1Xfdb0mw.jpg')`,
         }}
       />
-      <div className="absolute inset-0 bg-black/50" /> {/* Black overlay with 50% opacity */}
+      <div className="absolute inset-0 bg-black/50" />
 
       <div className="absolute inset-0">
         <motion.div
@@ -135,11 +134,11 @@ export default function AutocallLanding() {
         </div>
       </header>
 
-      {/* DROPPING LOGOS - Desktop */}
+      {/* DROPPING LOGOS - Desktop with enhanced hover */}
       {logos.map((logo) => (
         <motion.div
           key={logo.id}
-          className="absolute pointer-events-none hidden lg:block z-10"
+          className="absolute pointer-events-auto hidden lg:block z-10"
           style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
           variants={dropVariants}
           initial="initial"
@@ -147,22 +146,35 @@ export default function AutocallLanding() {
           custom={logo}
         >
           <motion.div
-            className="rounded-full flex items-center justify-center shadow-2xl border-white/10"
-            style={{ width: '180px', height: '180px', background: '#337543' }}
-            whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
+            className="rounded-full flex items-center justify-center shadow-2xl border-4 border-[#337543] bg-[#337543] relative overflow-hidden"
+            style={{ width: '160px', height: '160px' }}
+            whileHover={{
+              scale: 1.2,
+              y: -10,
+              boxShadow: '0 0 40px rgba(1, 169, 107, 0.8)',
+              borderColor: '#01ff8a',
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            <span className="text-lg md:text-xl font-black text-white text-center leading-tight whitespace-pre-line px-6">
+            {/* Glow ring on hover */}
+            <motion.div
+              className="absolute inset-0 rounded-full border-4 border-transparent"
+              whileHover={{
+                boxShadow: 'inset 0 0 60px rgba(1, 169, 107, 0.4), 0 0 60px rgba(1, 169, 107, 0.6)',
+              }}
+            />
+            <span className="relative z-10 text-lg md:text-xl font-black text-white text-center leading-tight whitespace-pre-line px-6">
               {logo.name}
             </span>
           </motion.div>
         </motion.div>
       ))}
 
-      {/* Smaller logos for tablet */}
+      {/* Tablet version */}
       {logos.slice(0, 5).map((logo) => (
         <motion.div
           key={`sm-${logo.id}`}
-          className="absolute pointer-events-none hidden md:block lg:hidden"
+          className="absolute pointer-events-auto hidden md:block lg:hidden z-10"
           style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
           variants={dropVariants}
           initial="initial"
@@ -170,8 +182,15 @@ export default function AutocallLanding() {
           custom={logo}
         >
           <motion.div
-            className="rounded-full flex items-center justify-center shadow-xl"
-            style={{ width: '120px', height: '120px', background: '#337543' }}
+            className="rounded-full flex items-center justify-center shadow-xl border-4 border-[#337543] bg-[#337543]"
+            style={{ width: '120px', height: '120px' }}
+            whileHover={{
+              scale: 1.2,
+              y: -8,
+              boxShadow: '0 0 30px rgba(1, 169, 107, 0.7)',
+              borderColor: '#01ff8a',
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
             <span className="text-sm font-bold text-white text-center leading-tight whitespace-pre-line px-3">
               {logo.name}
@@ -187,26 +206,41 @@ export default function AutocallLanding() {
       <div className="absolute top-[30%] right-10 h-[40%] w-[1px] bg-[#01a96b]/20 z-0 hidden md:block"></div>
 
       {/* MAIN CONTENT */}
-      <div className="h-screen flex flex-col items-center justify-center text-center px-6 pointer-events-none relative z-10">
-        <div className="space-y-4 md:space-y-6 max-w-6xl mx-auto">
-          <motion.h1
-            custom={0}
+      <div className="h-screen flex flex-col items-center justify-center text-center px-6 relative z-10">
+        <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto">
+          <div>
+            <motion.h1
+              custom={0}
+              variants={titleVariants}
+              initial="hidden"
+              animate="visible"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-none"
+            >
+            The 2026 UK Autocall Review
+            </motion.h1>
+            <motion.h2
+              custom={1}
+              variants={titleVariants}
+              initial="hidden"
+              animate="visible"
+              className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-[#01a96b] tracking-tight leading-none"
+            >
+            Evidence-based insight into the performance of FTSE-linked autocall investments.
+
+            </motion.h2>
+          </div>
+
+          <motion.p
+            custom={2}
             variants={titleVariants}
             initial="hidden"
             animate="visible"
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-white tracking-tight leading-none mt-0 sm:mt-[-120px]"
+            className="text-lg sm:text-xl md:text-1xl text-white/80 max-w-3xl mx-auto leading-relaxed mt-8"
           >
-            Consistent Returns
-          </motion.h1>
-          <motion.h2
-            custom={1}
-            variants={titleVariants}
-            initial="hidden"
-            animate="visible"
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-[#01a96b] tracking-tight leading-none"
-          >
-            in Volatile Markets.
-          </motion.h2>
+      An independent review of UK retail autocalls maturing in 2025, 
+            <br className="hidden sm:block" />
+supported by over a decade of performance data.
+          </motion.p>
         </div>
       </div>
 
@@ -216,27 +250,30 @@ export default function AutocallLanding() {
         style={{ transform: 'rotate(-35deg)', transformOrigin: 'center' }}
       ></div>
 
-      {/* UPDATED BOTTOM/TOP NAV with Circle Hover Effect */}
-      <nav className="fixed bottom-4  translate-x-1/2   md:w-auto md:top-10 md:bottom-auto md:left-auto md:right-10 md:translate-x-0 flex flex-wrap justify-center gap-4 md:gap-8 z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl">
-        {navItems.map((item) => (
-          <motion.button
-            key={item.label}
-            className={`relative px-6 py-3 text-[10px]  font-medium transition-colors ${
-              item.active ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
-            }`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {/* Circle background on hover/active */}
-            <motion.span
-              className="absolute inset-0 rounded-full bg-white/10"
-              initial={{ scale: 0, opacity: 0 }}
-              whileHover={{ scale: 1.3, opacity: 1 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            />
-            <span className="relative z-10">{item.label.toUpperCase()}</span>
-          </motion.button>
-        ))}
+      {/* CENTERED NAVIGATION - Responsive */}
+      <nav className="fixed z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl
+        bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] 
+        md:top-10 md:bottom-auto md:left-1/2 md:-translate-x-1/2">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-1">
+          {navItems.map((item) => (
+            <motion.button
+              key={item.label}
+              className={`relative px-6 py-3 text-[10px] md:text-xs font-medium transition-colors ${
+                item.active ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <motion.span
+                className="absolute inset-0 rounded-full bg-white/10"
+                initial={{ scale: 0, opacity: 0 }}
+                whileHover={{ scale: 1.3, opacity: 1 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              />
+              <span className="relative z-10">{item.label.toUpperCase()}</span>
+            </motion.button>
+          ))}
+        </div>
       </nav>
     </div>
   );

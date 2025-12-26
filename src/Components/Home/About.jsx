@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function IDADLandingPage() {
   // Updated text arrays to reflect IDAD's expertise in Autocall Structured Products
-  const headingWords = ['Proven', 'Performance', 'Through', 'Volatility'];
+  const headingWords = ['What Is the', '2026', 'Autocall Review?'];
   const headerWords = 'AUTOCALLS'.split('');
 
   // Animation variants (kept clean and performant)
@@ -62,7 +62,7 @@ export default function IDADLandingPage() {
 
   return (
     <div 
-      className="relative w-full min-h-screen" 
+      className="relative w-full " 
       style={{ 
         backgroundColor: '#0b3d62',
         color: 'white',
@@ -104,7 +104,7 @@ export default function IDADLandingPage() {
           {/* Left section - Big Typography */}
           <div className="w-full lg:w-1/2 text-center lg:text-left">
             <motion.h1
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-widest leading-tight"
+              className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-widest leading-tight"
               variants={containerVariants}
             >
               {headingWords.map((word, index) => (
@@ -139,8 +139,10 @@ AUTOCALLS                  </motion.span>
               variants={descVariants}
             >
               <p>
-                 Autocall Review analyzes the performance of FTSE-linked, capital-at-risk autocall structured products in the UK retail sector, specifically focusing on those maturing in 2025. The review also spans the decade-long performance from 2016 to 2025, providing insights into the resilience and performance of these products.
-              </p>
+
+The 2026 Autocall Review provides a comprehensive analysis of UK retail FTSE-linked capital-at-risk autocalls maturing during 2025.
+
+The review examines outcomes, returns, product structures, and issuer behaviour, offering clear insight into how autocalls have performed across different market conditions.              </p>
             </motion.div>
 
             {/* Call-to-action button */}

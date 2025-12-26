@@ -150,12 +150,11 @@ AUTOCALLS                  </motion.span>
               whileTap="tap"
             >
               <button 
-                className="group relative px-10 py-5 border border-[#01a96b]/40 text-white font-medium rounded-xl overflow-hidden transition-all duration-300"
+                className="group relative px-10 py-5  text-white font-medium rounded-xl overflow-hidden transition-all duration-300"
                 style={{
-                  backgroundColor: '#337543',
                 }}
               >
-                <span className="relative z-10 flex items-center">
+                {/* <span className="relative z-10 flex items-center">
                   DISCOVER AUTOCALLS
                   <motion.span
                     className="ml-4 text-[#01a96b] font-bold"
@@ -164,9 +163,9 @@ AUTOCALLS                  </motion.span>
                   >
                     →
                   </motion.span>
-                </span>
+                </span> */}
                 <motion.div
-                  className="absolute inset-0 bg-[#01a96b]"
+                  className="absolute inset-0 "
                   initial={{ x: '-100%' }}
                   whileHover={{ x: 0 }}
                   transition={{ duration: 0.4 }}

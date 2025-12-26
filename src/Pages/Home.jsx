@@ -9,15 +9,16 @@ import ContactDes from '../Components/Home/ContactDes';
 import Performance from '../Components/Home/Performance';
 import HowAutocallsWorkSection from '../Components/Home/HowAutocallsWorkSection';
 import AboutSection from '../Components/Home/Aboutus';
-import PerformanceModal from '../Components/Home/PerformanceModal';
 import TestimonialSection from '../Components/Home/Testiminal';
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
   const [logos, setLogos] = useState([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // New state for Full Report Modal
+  const [isFullReportOpen, setIsFullReportOpen] = useState(false);
 
   const logoData = [
     { name: '338 Autocalls Analysed', left: 8, angle: -15 },
@@ -26,8 +27,6 @@ const Home = () => {
     { name: '1.98 Year Average Term', left: 50, angle: 12 },
     { name: '338 Autocalls Analysed', left: 64, angle: -18 },
     { name: '100% Positive Outcomes in 2025', left: 78, angle: 25 },
-    // { name: '7.85% Average Annualised Return', left: 92, angle: -8 },
-    // { name: '1.98 Year Average Term', left: 36, angle: 15 }, // slight overlap ok for visual interest, or change to 50 if needed
   ];
 
   const navItems = [
@@ -51,34 +50,24 @@ const Home = () => {
       setTimeout(() => {
         setLogos((prev) => [
           ...prev,
-          {
-            ...logo,
-            id: index,
-          },
+          { ...logo, id: index },
         ]);
       }, delay);
     });
   }, []);
 
-  // Sync active section with URL hash and scroll position
   useEffect(() => {
     const updateActiveSection = () => {
       const hash = window.location.hash.slice(1);
-      if (hash) {
-        setActiveSection(hash);
-      } else {
-        setActiveSection('overview');
-      }
+      if (hash) setActiveSection(hash);
+      else setActiveSection('overview');
     };
-
     updateActiveSection();
-
     window.addEventListener('hashchange', updateActiveSection);
 
     const handleScroll = () => {
-      const sections = navItems.map(item => document.getElementById(item.id));
-      const scrollPos = window.scrollY + 100;
-
+      const sections = navItems.map((item) => document.getElementById(item.id));
+      const scrollPos = window.scrollY + 120;
       for (let i = sections.length - 1; i >= 0; i--) {
         if (sections[i] && sections[i].offsetTop <= scrollPos) {
           const id = navItems[i].id;
@@ -90,9 +79,7 @@ const Home = () => {
         }
       }
     };
-
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('hashchange', updateActiveSection);
       window.removeEventListener('scroll', handleScroll);
@@ -105,11 +92,7 @@ const Home = () => {
   };
 
   const dropVariants = {
-    initial: {
-      y: -600,
-      opacity: 0,
-      rotate: 0,
-    },
+    initial: { y: -600, opacity: 0, rotate: 0 },
     animate: (custom) => ({
       y: 0,
       opacity: 1,
@@ -135,13 +118,53 @@ const Home = () => {
     }),
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  if (isLoading) return <Loader />;
 
   return (
     <>
-      {/* MOBILE SIDEBAR MENU */}
+      {/* ==================== FULL REPORT MODAL ==================== */}
+      <AnimatePresence>
+        {isFullReportOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+            onClick={() => setIsFullReportOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between px-6 py-4 border-b">
+                <h3 className="text-2xl font-semibold text-gray-900">
+                  The 2026 UK Autocall Review - Full Report
+                </h3>
+                <button
+                  onClick={() => setIsFullReportOpen(false)}
+                  className="p-2 rounded-full hover:bg-gray-100 transition"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="flex-1">
+                <iframe
+                  src="/fullpdf.pdf"
+                  className="w-full h-full border-0"
+                  title="Full Report PDF"
+                  allowFullScreen
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ==================== MOBILE SIDEBAR MENU ==================== */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
@@ -152,7 +175,6 @@ const Home = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden"
             />
-
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -169,7 +191,6 @@ const Home = () => {
                   <X size={28} />
                 </button>
               </div>
-
               <nav className="flex-1 p-6">
                 <ul className="space-y-4">
                   {navItems.map((item) => (
@@ -180,7 +201,7 @@ const Home = () => {
                           e.preventDefault();
                           scrollToSection(item.id);
                         }}
-                        className={`w-full text-left text-lg font-medium transition-colors ${
+                        className={`block text-lg font-medium transition-colors ${
                           activeSection === item.id
                             ? 'text-[#01a96b]'
                             : 'text-white/80 hover:text-white'
@@ -190,6 +211,17 @@ const Home = () => {
                       </a>
                     </li>
                   ))}
+                  <li>
+                    <button
+                      onClick={() => {
+                        setIsFullReportOpen(true);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left text-lg font-medium text-white hover:text-[#01a96b] transition"
+                    >
+                      View Full Report
+                    </button>
+                  </li>
                 </ul>
               </nav>
             </motion.div>
@@ -197,8 +229,51 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      {/* HERO SECTION */}
-      <section id="overview" className="relative w-full min-h-screen overflow-hidden">
+      {/* ==================== DESKTOP NAV ==================== */}
+      <nav className="hidden lg:flex fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-xl border-b border-white/10 shadow-lg">
+        <div className="max-w-7xl mx-auto w-full px-6 py-4 flex items-center justify-between ">
+          <div className="flex items-center">
+            <img src="/logow.png" alt="Company Logo" className="h-12" />
+          </div>
+          <div className="flex items-center gap-8">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.id);
+                }}
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === item.id ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
+                }`}
+              >
+                {item.label.toUpperCase()}
+              </a>
+            ))}
+            <button
+              onClick={() => setIsFullReportOpen(true)}
+              className="px-6 py-3 bg-[#01a96b] text-white  rounded-full hover:bg-white transition shadow-lg hover:shadow-[#01a96b]/50"
+            >
+              VIEW FULL REPORT
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* ==================== MOBILE HEADER ==================== */}
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-black/40 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex justify-between items-center">
+        <img src="/logow.png" alt="Company Logo" className="h-10" />
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="text-white hover:text-[#01a96b] transition"
+        >
+          <Menu size={32} />
+        </button>
+      </header>
+
+      {/* ==================== HERO SECTION ==================== */}
+      <section id="overview" className="relative w-full min-h-screen overflow-hidden pt-0 lg:pt-20">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
@@ -206,54 +281,36 @@ const Home = () => {
           }}
         />
         <div className="absolute inset-0 bg-black/50" />
-
         <div className="absolute inset-0">
           <motion.div
             className="absolute inset-0 bg-gradient-to-br from-[#0b3d62]/80 via-[#0f4a75]/80 to-[#0b3d62]/80"
             animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
             transition={{ duration: 20, repeat: Infinity, repeatType: 'reverse' }}
           />
-
+          {/* Grid animation lines... */}
           <div className="absolute inset-0 opacity-40">
-            {Array(20)
-              .fill()
-              .map((_, i) => (
-                <motion.div
-                  key={`h-${i}`}
-                  className="absolute bg-white/20 h-px w-full"
-                  style={{ top: `${i * 5}%` }}
-                  animate={{ opacity: [0.15, 0.35, 0.15] }}
-                  transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', delay: i * 0.15 }}
-                />
-              ))}
-            {Array(20)
-              .fill()
-              .map((_, i) => (
-                <motion.div
-                  key={`v-${i}`}
-                  className="absolute bg-white/20 w-px h-full"
-                  style={{ left: `${i * 5}%` }}
-                  animate={{ opacity: [0.15, 0.35, 0.15] }}
-                  transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', delay: i * 0.15 }}
-                />
-              ))}
+            {Array(20).fill().map((_, i) => (
+              <motion.div
+                key={`h-${i}`}
+                className="absolute bg-white/20 h-px w-full"
+                style={{ top: `${i * 5}%` }}
+                animate={{ opacity: [0.15, 0.35, 0.15] }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', delay: i * 0.15 }}
+              />
+            ))}
+            {Array(20).fill().map((_, i) => (
+              <motion.div
+                key={`v-${i}`}
+                className="absolute bg-white/20 w-px h-full"
+                style={{ left: `${i * 5}%` }}
+                animate={{ opacity: [0.15, 0.35, 0.15] }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', delay: i * 0.15 }}
+              />
+            ))}
           </div>
         </div>
 
-        <header className="absolute top-0 left-0 right-0 flex justify-between items-center p-6 z-40">
-          <div className="flex items-center gap-3">
-            <img src="/logow.png" alt="Company Logo" className="h-10 md:h-14" />
-          </div>
-
-          <button
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden text-white hover:text-[#01a96b] transition"
-          >
-            <Menu size={32} />
-          </button>
-        </header>
-
-        {/* Desktop Circles - All aligned near the bottom */}
+        {/* Floating Circles (Desktop & Tablet) */}
         <div className="absolute bottom-12 left-0 right-0 hidden lg:block z-10">
           <div className="relative h-48">
             {logos.map((logo) => (
@@ -277,18 +334,9 @@ const Home = () => {
                   }}
                   animate={{
                     y: [0, -15, 0],
-                    boxShadow: [
-                      '0 0 20px rgba(1, 169, 107, 0.4)',
-                      '0 0 35px rgba(1, 169, 107, 0.7)',
-                      '0 0 20px rgba(1, 169, 107, 0.4)',
-                    ],
+                    boxShadow: ['0 0 20px rgba(1, 169, 107, 0.4)', '0 0 35px rgba(1, 169, 107, 0.7)', '0 0 20px rgba(1, 169, 107, 0.4)'],
                   }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    repeatType: 'reverse',
-                    ease: 'easeInOut',
-                  }}
+                  transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
                 >
                   <span className="text-lg md:text-xl font-black text-white text-center leading-tight px-6">
                     {logo.name}
@@ -299,35 +347,9 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Tablet Circles - Fewer and smaller, also at bottom */}
-        <div className="absolute bottom-8 left-0 right-0 hidden md:block lg:hidden z-10">
-          <div className="relative h-40">
-            {logos.slice(0, 5).map((logo) => (
-              <motion.div
-                key={`sm-${logo.id}`}
-                className="absolute"
-                style={{ left: `${logo.left * 1.2}%`, transform: 'translateX(-50%)' }} // slightly spread for smaller screens
-                variants={dropVariants}
-                initial="initial"
-                animate="animate"
-                custom={logo}
-              >
-                <motion.div
-                  className="rounded-full flex items-center justify-center shadow-xl border-4 border-[#337543] bg-[#337543]"
-                  style={{ width: '120px', height: '120px' }}
-                  whileHover={{ scale: 1.2, y: -15, boxShadow: '0 0 30px rgba(1, 169, 107, 0.7)', borderColor: '#01ff8a' }}
-                >
-                  <span className="text-sm font-bold text-white text-center leading-tight px-3">
-                    {logo.name}
-                  </span>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        <div className="h-screen flex flex-col items-center justify-center text-center px-6 relative z-20">
-<div className="space-y-6 md:space-y-8 max-w-5xl mx-auto mb-0 md:mb-30">
+        {/* Hero Content */}
+        <div className="relative z-20 h-screen flex flex-col items-center justify-center text-center px-6">
+          <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto mb-0 md:mb-30">
             <motion.h1
               custom={0}
               variants={titleVariants}
@@ -359,47 +381,19 @@ const Home = () => {
             </motion.p>
           </div>
         </div>
-
-        {/* Desktop Navbar */}
-        <nav className="hidden lg:block fixed z-50 bg-black/30 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-            {navItems.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.id);
-                }}
-                className={`relative px-4 py-2 text-xs md:text-sm font-medium transition-colors ${
-                  activeSection === item.id ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
-                }`}
-              >
-                <motion.span
-                  className="absolute inset-0 rounded-full bg-white/10"
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileHover={{ scale: 1.3, opacity: 1 }}
-                  transition={{ duration: 0.4 }}
-                />
-                <span className="relative z-10">{item.label.toUpperCase()}</span>
-              </a>
-            ))}
-          </div>
-        </nav>
       </section>
 
+      {/* Other Sections */}
       <section id="review"><ReviewSec /></section>
       <section id="findings"><KeyFindings /></section>
       <section id="competencies"><CompetenciesSection /></section>
       <section id="performance">
-        <Performance onOpenModal={() => setIsModalOpen(true)} />
+        <Performance onOpenModal={() => {/* your existing modal logic */}} />
       </section>
       <section id="how-it-works"><HowAutocallsWorkSection /></section>
       <section id="about"><AboutSection /></section>
       <TestimonialSection />
       <section id="contact"><ContactDes /></section>
-
-      <PerformanceModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };

@@ -24,55 +24,117 @@ const steps = [
   },
 ];
 
-const stepContainerVariants = {
+const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.25 } },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const titleVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1, ease: 'easeOut' },
+  },
 };
 
 const stepVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
+  hidden: { opacity: 0, y: 60, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.9,
+      ease: 'easeOut',
+    },
+  },
+};
+
+const iconVariants = {
+  hidden: { scale: 0, rotate: -180 },
+  visible: {
+    scale: 1,
+    rotate: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 200,
+      damping: 15,
+      delay: 0.2,
+    },
+  },
+};
+
+const cardHoverVariants = {
+  hover: {
+    y: -12,
+    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.1)',
+    transition: { duration: 0.4 },
+  },
 };
 
 export default function HowAutocallsWorkSection() {
   return (
-    <section className="bg-[#0b3d62] px-6 py-16 md:px-12 md:py-24 lg:px-24 lg:py-0 overflow-hidden">
+    <section className="bg-gray-50 px-6 py-16 md:px-12 md:py-24 lg:px-24 lg:py-32 overflow-hidden">
       <div className="max-w-screen-2xl mx-auto">
+        {/* Title Section */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-20"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={titleVariants}
+          className="text-center mb-16 md:mb-24"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight text-white mb-8">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight text-gray-900 mb-6">
             Understanding Autocall Investments
           </h2>
-          <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-white/80 max-w-5xl mx-auto">
+          <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-600 max-w-5xl mx-auto">
             Autocalls are structured investments designed to deliver predefined returns based on the performance of an underlying index, most commonly the FTSE 100 or FTSE CSDI.
           </p>
         </motion.div>
 
+        {/* Steps Grid */}
         <motion.div
-          variants={stepContainerVariants}
+          variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12"
         >
           {steps.map((step, index) => (
             <motion.div
               key={index}
-              variants={stepVariants}
-              className="relative bg-white/10 backdrop-blur-md rounded-2xl p-8 flex flex-col items-center text-center border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-500"
+              // variants={stepVariants}
+              whileHover="hover"
+              variants={{ ...stepVariants, ...cardHoverVariants }}
+              className="relative bg-white rounded-3xl p-8 lg:p-10 flex flex-col items-center text-center shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-gray-100"
             >
-              <div className="bg-white/20 p-6 rounded-full mb-6">
-                <step.icon className="w-14 h-14 text-white" />
-              </div>
-              <h3 className="text-xl md:text-2xl font-semibold text-white mb-4">
+              {/* Icon Circle */}
+              <motion.div
+                variants={iconVariants}
+                className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-full mb-8 shadow-xl"
+              >
+                <step.icon className="w-12 h-12 md:w-14 md:h-14 text-white" />
+              </motion.div>
+
+              {/* Step Number (subtle) */}
+              <span className="absolute top-4 right-6 text-6xl font-bold text-green-100 opacity-30 select-none">
+                0{index + 1}
+              </span>
+
+              {/* Title */}
+              <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">
                 {step.title}
               </h3>
-              <p className="text-base md:text-lg text-white/75 leading-relaxed">
+
+              {/* Description */}
+              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                 {step.desc}
               </p>
             </motion.div>

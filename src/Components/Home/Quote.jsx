@@ -1,6 +1,62 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import React from "react";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, Tooltip, Legend, ArcElement, Title, CategoryScale, LinearScale } from "chart.js";
+
+ChartJS.register(Tooltip, Legend, ArcElement, Title, CategoryScale, LinearScale);
+
+const AnimatedPieChart = () => {
+  const data = {
+    labels: ["Stepdown", "Crescent", "Hurdle", "Level"],
+    datasets: [
+      {
+        label: "2025 Maturities by shape",
+        data: [203, 100, 40, 30],
+        backgroundColor: ["#1e7e34", "#2c3e50", "#95a5a6", "#34495e"],
+        borderColor: ["#fff", "#fff", "#fff", "#fff"],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `${tooltipItem.label}: ${tooltipItem.raw} (${(
+              (tooltipItem.raw / 373) * 100
+            ).toFixed(0)}%)`;
+          },
+        },
+      },
+      legend: {
+        position: "top",
+        labels: {
+          font: {
+            size: 16,
+          },
+        },
+      },
+    },
+    animation: {
+      animateScale: true,
+      animateRotate: true,
+    },
+  };
+
+  return (
+    <div className="bg-white p-8 rounded-2xl shadow-xl">
+      <h3 className="text-2xl font-bold text-gray-800 text-center mb-8">
+        2025 Maturities by Shape
+      </h3>
+      <Pie data={data} options={options} />
+    </div>
+  );
+};
 
 export default function HeroSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,17 +158,7 @@ export default function HeroSection() {
                       />
                     ))}
                   </motion.span>
-                  ) word for
-                </motion.span>
-
-                <motion.span
-                  initial={{ opacity: 0, y: 60 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.4 }}
-                  transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="block"
-                >
-                  it.
+                  ) word for it.
                 </motion.span>
               </h1>
 
@@ -131,7 +177,7 @@ export default function HeroSection() {
               </motion.button>
             </div>
 
-            {/* Right Side - Updated Performance Overview */}
+            {/* Right Side - Performance Overview */}
             <div className="w-full lg:w-5/12">
               <motion.div
                 initial="hidden"
@@ -140,17 +186,14 @@ export default function HeroSection() {
                 variants={descriptionVariants}
                 className="space-y-8"
               >
-                {/* Heading */}
                 <h2 className="text-2xl md:text-3xl font-semibold text-white">
                   Performance Overview
                 </h2>
 
-                {/* Main Content Paragraph */}
                 <p className="text-sm sm:text-base md:text-lg leading-relaxed text-white/80">
                   Autocalls have demonstrated consistent performance across multiple market cycles, including periods of heightened volatility, economic uncertainty, and changing interest rate environments.
                 </p>
 
-                {/* Simple Data Points List */}
                 <ul className="space-y-4 text-sm sm:text-base md:text-lg text-white/70 list-disc list-inside">
                   <li>
                     <span className="text-white font-medium">Average returns across 2016–2025</span> remained above <span className="text-green-400 font-semibold">7% p.a.</span>
@@ -168,7 +211,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Dark Theme Modal */}
+      {/* White Theme Modal */}
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
@@ -176,7 +219,7 @@ export default function HeroSection() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsModalOpen(false)}
-            className="fixed inset-0 bg-[#0b3d62]/80 z-50 flex items-center justify-center p-4 overflow-y-auto"
+            className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 overflow-y-auto"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -184,61 +227,56 @@ export default function HeroSection() {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#0b3d62] rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto relative border border-gray-800"
+              className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto relative"
             >
               {/* Close Button */}
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-6 right-6 text-gray-400 hover:text-white transition z-10 bg-gray-800/50 rounded-full p-2 hover:bg-gray-700"
+                className="absolute top-6 right-6 text-gray-500 hover:text-gray-800 transition z-10 bg-gray-100 rounded-full p-2 hover:bg-gray-200"
               >
                 <X size={32} />
               </button>
 
               <div className="p-8 md:p-12 lg:p-16">
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-10 text-center">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-10 text-center">
                   Overall Performance Summary
                 </h2>
 
-                {/* Performance List */}
-                <ul className="space-y-5 text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
-                  <li><strong className="text-white">Total matured plans:</strong> 338</li>
-                  <li><strong className="text-white">All matured positively</strong> in line with their stated terms</li>
-                  <li><strong className="text-white">Average annualised return:</strong> 7.85% over average term of 1.98 years</li>
-                  <li><strong className="text-white">Bottom quartile average annualised return:</strong> 6.54% p.a.</li>
-                  <li><strong className="text-white">Top quartile average annualised return:</strong> 9.33% p.a.</li>
-                  <li><strong className="text-white">At the money / flat contracts</strong> deliver 8.78% p.a. average over average 1.89 years</li>
-                  <li><strong className="text-white">Step-down shapes</strong> dominated representing 60% of all maturities</li>
-                  <li><strong className="text-white">HSBC Bank</strong> dominated as counterparty – representing 32% of maturities</li>
-                  <li><strong className="text-white">FTSE CSDI linked contracts</strong> deliver 1.84% per annum average performance premium over those using FTSE 100</li>
+                <ul className="space-y-5 text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed max-w-4xl mx-auto">
+                  <li><strong className="text-gray-900">Total matured plans:</strong> 338</li>
+                  <li><strong className="text-gray-900">All matured positively</strong> in line with their stated terms</li>
+                  <li><strong className="text-gray-900">Average annualised return:</strong> 7.85% over average term of 1.98 years</li>
+                  <li><strong className="text-gray-900">Bottom quartile average annualised return:</strong> 6.54% p.a.</li>
+                  <li><strong className="text-gray-900">Top quartile average annualised return:</strong> 9.33% p.a.</li>
+                  <li><strong className="text-gray-900">At the money / flat contracts</strong> deliver 8.78% p.a. average over average 1.89 years</li>
+                  <li><strong className="text-gray-900">Step-down shapes</strong> dominated representing 60% of all maturities</li>
+                  <li><strong className="text-gray-900">HSBC Bank</strong> dominated as counterparty – representing 32% of maturities</li>
+                  <li><strong className="text-gray-900">FTSE CSDI linked contracts</strong> deliver 1.84% per annum average performance premium over those using FTSE 100</li>
                 </ul>
 
-                {/* Highlight Cards - Dark Style */}
+                {/* Highlight Cards - Light Style */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-16">
-                  <div className="bg-gradient-to-br from-green-900/50 to-green-800/30 backdrop-blur-sm rounded-2xl p-8 text-center border border-green-700/30 shadow-xl">
-                    <p className="text-5xl md:text-6xl font-bold text-green-400">7.85%</p>
-                    <p className="text-gray-300 mt-4 text-base md:text-lg">Average Annualised Return</p>
+                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 text-center border border-green-200 shadow-lg">
+                    <p className="text-5xl md:text-6xl font-bold text-green-600">7.85%</p>
+                    <p className="text-gray-700 mt-4 text-base md:text-lg">Average Annualised Return</p>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-900/50 to-blue-800/30 backdrop-blur-sm rounded-2xl p-8 text-center border border-blue-700/30 shadow-xl">
-                    <p className="text-5xl md:text-6xl font-bold text-blue-400">100%</p>
-                    <p className="text-gray-300 mt-4 text-base md:text-lg">Positive Maturities</p>
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 text-center border border-blue-200 shadow-lg">
+                    <p className="text-5xl md:text-6xl font-bold text-blue-600">100%</p>
+                    <p className="text-gray-700 mt-4 text-base md:text-lg">Positive Maturities</p>
                   </div>
-                  <div className="bg-gradient-to-br from-purple-900/50 to-purple-800/30 backdrop-blur-sm rounded-2xl p-8 text-center border border-purple-700/30 shadow-xl">
-                    <p className="text-5xl md:text-6xl font-bold text-purple-400">+1.84%</p>
-                    <p className="text-gray-300 mt-4 text-base md:text-lg">FTSE CSDI Premium</p>
+                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 text-center border border-purple-200 shadow-lg">
+                    <p className="text-5xl md:text-6xl font-bold text-purple-600">+1.84%</p>
+                    <p className="text-gray-700 mt-4 text-base md:text-lg">FTSE CSDI Premium</p>
                   </div>
                 </div>
 
-                {/* Image Section */}
+                {/* Pie Chart Section */}
                 <div className="mt-16 flex justify-center">
-                  <img
-                    src="/per.jpg"
-                    alt="Performance chart"
-                    className="max-w-full h-auto rounded-xl shadow-2xl border border-gray-700"
-                  />
+                  <AnimatedPieChart />
                 </div>
 
                 <div className="mt-10 text-center text-gray-500 text-sm">
-                  Data accurate as of latest maturity records
+                  Data accurate as of latest maturity records (December 2025)
                 </div>
               </div>
             </motion.div>

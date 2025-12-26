@@ -24,6 +24,10 @@ const Home = () => {
     { name: '100% Positive Outcomes in 2025', angle: -20 },
     { name: '7.85% Average Annualised Return', angle: 0 },
     { name: '1.98 Year Average Term', angle: 25 },
+        { name: '338 Autocalls Analysed', angle: 15 },
+    { name: '100% Positive Outcomes in 2025', angle: -20 },
+    { name: '7.85% Average Annualised Return', angle: 0 },
+    { name: '1.98 Year Average Term', angle: 25 },
   ];
 
   const navItems = [
@@ -354,7 +358,7 @@ const Home = () => {
         </div>
 
         {/* Desktop Navbar - Now with proper # hash links */}
-        <nav className=" hidden lg:block fixed z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
+        <nav className=" hidden lg:block fixed z-50 bg-black/30 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {navItems.map((item) => (
               <a

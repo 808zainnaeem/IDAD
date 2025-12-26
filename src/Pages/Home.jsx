@@ -20,14 +20,14 @@ const Home = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const logoData = [
-    { name: '338 Autocalls Analysed', angle: 15 },
-    { name: '100% Positive Outcomes in 2025', angle: -20 },
-    { name: '7.85% Average Annualised Return', angle: 0 },
-    { name: '1.98 Year Average Term', angle: 25 },
-        { name: '338 Autocalls Analysed', angle: 15 },
-    { name: '100% Positive Outcomes in 2025', angle: -20 },
-    { name: '7.85% Average Annualised Return', angle: 0 },
-    { name: '1.98 Year Average Term', angle: 25 },
+    { name: '338 Autocalls Analysed', left: 8, angle: -15 },
+    { name: '100% Positive Outcomes in 2025', left: 22, angle: 20 },
+    { name: '7.85% Average Annualised Return', left: 36, angle: -10 },
+    { name: '1.98 Year Average Term', left: 50, angle: 12 },
+    { name: '338 Autocalls Analysed', left: 64, angle: -18 },
+    { name: '100% Positive Outcomes in 2025', left: 78, angle: 25 },
+    // { name: '7.85% Average Annualised Return', left: 92, angle: -8 },
+    // { name: '1.98 Year Average Term', left: 36, angle: 15 }, // slight overlap ok for visual interest, or change to 50 if needed
   ];
 
   const navItems = [
@@ -46,8 +46,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const shuffled = [...logoData].sort(() => Math.random() - 0.5);
-    shuffled.forEach((logo, index) => {
+    logoData.forEach((logo, index) => {
       const delay = index * 300 + Math.random() * 400;
       setTimeout(() => {
         setLogos((prev) => [
@@ -55,9 +54,6 @@ const Home = () => {
           {
             ...logo,
             id: index,
-            left: 10 + Math.random() * 80,
-            rotateStart: Math.random() * 60 - 30,
-            rotateEnd: logo.angle,
           },
         ]);
       }, delay);
@@ -75,13 +71,10 @@ const Home = () => {
       }
     };
 
-    // Initial load
     updateActiveSection();
 
-    // Listen to hash changes
     window.addEventListener('hashchange', updateActiveSection);
 
-    // Optional: Update hash on scroll (without jumping)
     const handleScroll = () => {
       const sections = navItems.map(item => document.getElementById(item.id));
       const scrollPos = window.scrollY + 100;
@@ -113,14 +106,14 @@ const Home = () => {
 
   const dropVariants = {
     initial: {
-      y: -500,
+      y: -600,
       opacity: 0,
-      rotate: (custom) => custom.rotateStart || 0,
+      rotate: 0,
     },
     animate: (custom) => ({
-      y: window.innerHeight - 220,
+      y: 0,
       opacity: 1,
-      rotate: custom.rotateEnd,
+      rotate: custom.angle || 0,
       transition: {
         y: { type: 'spring', stiffness: 60, damping: 20, mass: 1.5 },
         opacity: { duration: 0.8, delay: 0.3 },
@@ -260,71 +253,81 @@ const Home = () => {
           </button>
         </header>
 
-        {logos.map((logo) => (
-          <motion.div
-            key={logo.id}
-            className="absolute hidden lg:block z-10 pointer-events-auto"
-            style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
-            variants={dropVariants}
-            initial="initial"
-            animate="animate"
-            custom={logo}
-          >
-            <motion.div
-              className="rounded-full flex items-center justify-center shadow-2xl border-4 border-[#337543] bg-[#337543] overflow-hidden"
-              style={{ width: '160px', height: '160px' }}
-              whileHover={{
-                scale: 1.2,
-                y: -10,
-                boxShadow: '0 0 40px rgba(1, 169, 107, 0.8)',
-                borderColor: '#01ff8a',
-              }}
-              animate={{
-                y: [0, -15, 0],
-                boxShadow: [
-                  '0 0 20px rgba(1, 169, 107, 0.4)',
-                  '0 0 35px rgba(1, 169, 107, 0.7)',
-                  '0 0 20px rgba(1, 169, 107, 0.4)',
-                ],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                repeatType: 'reverse',
-                ease: 'easeInOut',
-              }}
-            >
-              <span className="text-lg md:text-xl font-black text-white text-center leading-tight px-6">
-                {logo.name}
-              </span>
-            </motion.div>
-          </motion.div>
-        ))}
+        {/* Desktop Circles - All aligned near the bottom */}
+        <div className="absolute bottom-12 left-0 right-0 hidden lg:block z-10">
+          <div className="relative h-48">
+            {logos.map((logo) => (
+              <motion.div
+                key={logo.id}
+                className="absolute pointer-events-auto"
+                style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
+                variants={dropVariants}
+                initial="initial"
+                animate="animate"
+                custom={logo}
+              >
+                <motion.div
+                  className="rounded-full flex items-center justify-center shadow-2xl border-4 border-[#337543] bg-[#337543] overflow-hidden"
+                  style={{ width: '160px', height: '160px' }}
+                  whileHover={{
+                    scale: 1.2,
+                    y: -20,
+                    boxShadow: '0 0 40px rgba(1, 169, 107, 0.8)',
+                    borderColor: '#01ff8a',
+                  }}
+                  animate={{
+                    y: [0, -15, 0],
+                    boxShadow: [
+                      '0 0 20px rgba(1, 169, 107, 0.4)',
+                      '0 0 35px rgba(1, 169, 107, 0.7)',
+                      '0 0 20px rgba(1, 169, 107, 0.4)',
+                    ],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatType: 'reverse',
+                    ease: 'easeInOut',
+                  }}
+                >
+                  <span className="text-lg md:text-xl font-black text-white text-center leading-tight px-6">
+                    {logo.name}
+                  </span>
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
-        {logos.slice(0, 5).map((logo) => (
-          <motion.div
-            key={`sm-${logo.id}`}
-            className="absolute hidden md:block lg:hidden z-10"
-            style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
-            variants={dropVariants}
-            initial="initial"
-            animate="animate"
-            custom={logo}
-          >
-            <motion.div
-              className="rounded-full flex items-center justify-center shadow-xl border-4 border-[#337543] bg-[#337543]"
-              style={{ width: '120px', height: '120px' }}
-              whileHover={{ scale: 1.2, y: -8, boxShadow: '0 0 30px rgba(1, 169, 107, 0.7)', borderColor: '#01ff8a' }}
-            >
-              <span className="text-sm font-bold text-white text-center leading-tight px-3">
-                {logo.name}
-              </span>
-            </motion.div>
-          </motion.div>
-        ))}
+        {/* Tablet Circles - Fewer and smaller, also at bottom */}
+        <div className="absolute bottom-8 left-0 right-0 hidden md:block lg:hidden z-10">
+          <div className="relative h-40">
+            {logos.slice(0, 5).map((logo) => (
+              <motion.div
+                key={`sm-${logo.id}`}
+                className="absolute"
+                style={{ left: `${logo.left * 1.2}%`, transform: 'translateX(-50%)' }} // slightly spread for smaller screens
+                variants={dropVariants}
+                initial="initial"
+                animate="animate"
+                custom={logo}
+              >
+                <motion.div
+                  className="rounded-full flex items-center justify-center shadow-xl border-4 border-[#337543] bg-[#337543]"
+                  style={{ width: '120px', height: '120px' }}
+                  whileHover={{ scale: 1.2, y: -15, boxShadow: '0 0 30px rgba(1, 169, 107, 0.7)', borderColor: '#01ff8a' }}
+                >
+                  <span className="text-sm font-bold text-white text-center leading-tight px-3">
+                    {logo.name}
+                  </span>
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
-        <div className="h-screen flex flex-col items-center justify-center text-center px-6 relative z-10">
-          <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto">
+        <div className="h-screen flex flex-col items-center justify-center text-center px-6 relative z-20">
+          <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto mb-30">
             <motion.h1
               custom={0}
               variants={titleVariants}
@@ -357,8 +360,8 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Desktop Navbar - Now with proper # hash links */}
-        <nav className=" hidden lg:block fixed z-50 bg-black/30 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
+        {/* Desktop Navbar */}
+        <nav className="hidden lg:block fixed z-50 bg-black/30 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {navItems.map((item) => (
               <a

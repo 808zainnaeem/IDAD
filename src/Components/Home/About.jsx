@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 export default function IDADLandingPage() {
   // Updated text arrays to reflect IDAD's expertise in Autocall Structured Products
   const headingWords = ['Proven', 'Performance', 'Through', 'Volatility'];
-  const headerWords = 'IDAD'.split('');
+  const headerWords = 'AUTOCALLS'.split('');
 
   // Animation variants (kept clean and performant)
   const containerVariants = {
@@ -126,15 +126,11 @@ export default function IDADLandingPage() {
                 className="text-2xl sm:text-3xl md:text-4xl tracking-widest mb-6"
                 style={{ color: '#01a96b' }}
               >
-                {headerWords.map((letter, index) => (
                   <motion.span
-                    key={index}
                     variants={headerWordVariants}
                     style={{ display: 'inline-block', marginRight: '2px' }}
                   >
-                    {letter}
-                  </motion.span>
-                ))}
+AUTOCALLS                  </motion.span>
               </motion.h2>
             </motion.div>
 
@@ -143,8 +139,7 @@ export default function IDADLandingPage() {
               variants={descVariants}
             >
               <p>
-                IDAD is a leading specialist in Autocall Structured Products, delivering consistent, resilient returns for investors since 1992. 
-                With a proven track record of high success rates, no capital losses when held to maturity, and average annualised returns exceeding traditional funds—even through volatile markets—we design and distribute innovative structured investments linked to major indices like the FTSE 100 and FTSE CSDI.
+                 Autocall Review analyzes the performance of FTSE-linked, capital-at-risk autocall structured products in the UK retail sector, specifically focusing on those maturing in 2025. The review also spans the decade-long performance from 2016 to 2025, providing insights into the resilience and performance of these products.
               </p>
             </motion.div>
 

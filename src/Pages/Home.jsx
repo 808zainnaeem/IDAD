@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react'; // You'll need to install lucide-react: npm i lucide-react
+import { Menu, X } from 'lucide-react';
 import Loader from '../Components/Loader';
 import ReviewSec from '../Components/Home/About';
 import KeyFindings from '../Components/Home/Marquee';
@@ -60,14 +60,51 @@ const Home = () => {
     });
   }, []);
 
+  // Sync active section with URL hash and scroll position
+  useEffect(() => {
+    const updateActiveSection = () => {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        setActiveSection(hash);
+      } else {
+        setActiveSection('overview');
+      }
+    };
+
+    // Initial load
+    updateActiveSection();
+
+    // Listen to hash changes
+    window.addEventListener('hashchange', updateActiveSection);
+
+    // Optional: Update hash on scroll (without jumping)
+    const handleScroll = () => {
+      const sections = navItems.map(item => document.getElementById(item.id));
+      const scrollPos = window.scrollY + 100;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (sections[i] && sections[i].offsetTop <= scrollPos) {
+          const id = navItems[i].id;
+          if (window.location.hash !== `#${id}`) {
+            window.history.replaceState(null, '', `#${id}`);
+            setActiveSection(id);
+          }
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('hashchange', updateActiveSection);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setActiveSection(sectionId);
-      // Close mobile menu after click
-      setIsMobileMenuOpen(false);
-    }
+    window.location.hash = sectionId;
+    setIsMobileMenuOpen(false);
   };
 
   const dropVariants = {
@@ -111,7 +148,6 @@ const Home = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -120,7 +156,6 @@ const Home = () => {
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden"
             />
 
-            {/* Sidebar */}
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -142,8 +177,12 @@ const Home = () => {
                 <ul className="space-y-4">
                   {navItems.map((item) => (
                     <li key={item.id}>
-                      <button
-                        onClick={() => scrollToSection(item.id)}
+                      <a
+                        href={`#${item.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          scrollToSection(item.id);
+                        }}
                         className={`w-full text-left text-lg font-medium transition-colors ${
                           activeSection === item.id
                             ? 'text-[#01a96b]'
@@ -151,7 +190,7 @@ const Home = () => {
                         }`}
                       >
                         {item.label}
-                      </button>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -163,7 +202,6 @@ const Home = () => {
 
       {/* HERO SECTION */}
       <section id="overview" className="relative w-full min-h-screen overflow-hidden">
-        {/* Background */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
@@ -172,7 +210,6 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-black/50" />
 
-        {/* Animated Gradient & Grid */}
         <div className="absolute inset-0">
           <motion.div
             className="absolute inset-0 bg-gradient-to-br from-[#0b3d62]/80 via-[#0f4a75]/80 to-[#0b3d62]/80"
@@ -206,13 +243,11 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Header with Hamburger (Mobile) / Logo */}
         <header className="absolute top-0 left-0 right-0 flex justify-between items-center p-6 z-40">
           <div className="flex items-center gap-3">
             <img src="/logow.png" alt="Company Logo" className="h-10 md:h-14" />
           </div>
 
-          {/* Hamburger Button - Mobile Only */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="lg:hidden text-white hover:text-[#01a96b] transition"
@@ -221,7 +256,6 @@ const Home = () => {
           </button>
         </header>
 
-        {/* Dropping Logos - Desktop */}
         {logos.map((logo) => (
           <motion.div
             key={logo.id}
@@ -263,7 +297,6 @@ const Home = () => {
           </motion.div>
         ))}
 
-        {/* Tablet Logos */}
         {logos.slice(0, 5).map((logo) => (
           <motion.div
             key={`sm-${logo.id}`}
@@ -286,7 +319,6 @@ const Home = () => {
           </motion.div>
         ))}
 
-        {/* Hero Content */}
         <div className="h-screen flex flex-col items-center justify-center text-center px-6 relative z-10">
           <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto">
             <motion.h1
@@ -321,18 +353,20 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Desktop/Tablet Navbar (Hidden on Mobile) */}
-            <nav className=" hidden lg:block fixed z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
+        {/* Desktop Navbar - Now with proper # hash links */}
+        <nav className=" hidden lg:block fixed z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] md:top-10 md:bottom-auto">
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {navItems.map((item) => (
-              <motion.button
+              <a
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
+                href={`#${item.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item.id);
+                }}
                 className={`relative px-4 py-2 text-xs md:text-sm font-medium transition-colors ${
                   activeSection === item.id ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
                 }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
                 <motion.span
                   className="absolute inset-0 rounded-full bg-white/10"
@@ -341,13 +375,12 @@ const Home = () => {
                   transition={{ duration: 0.4 }}
                 />
                 <span className="relative z-10">{item.label.toUpperCase()}</span>
-              </motion.button>
+              </a>
             ))}
           </div>
         </nav>
       </section>
 
-      {/* OTHER SECTIONS */}
       <section id="review"><ReviewSec /></section>
       <section id="findings"><KeyFindings /></section>
       <section id="competencies"><CompetenciesSection /></section>
@@ -359,7 +392,6 @@ const Home = () => {
       <TestimonialSection />
       <section id="contact"><ContactDes /></section>
 
-      {/* Performance Modal */}
       <PerformanceModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );

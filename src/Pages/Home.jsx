@@ -217,7 +217,7 @@ const Home = () => {
                         setIsFullReportOpen(true);
                         setIsMobileMenuOpen(false);
                       }}
-                      className="w-full text-left text-lg font-medium text-white hover:text-[#01a96b] transition"
+                      className="w-full text-left text-lg font-medium text-white  transition"
                     >
                       View Full Report
                     </button>
@@ -253,7 +253,7 @@ const Home = () => {
             ))}
             <button
               onClick={() => setIsFullReportOpen(true)}
-              className="px-6 py-3 bg-[#01a96b] text-white  rounded-full hover:bg-white transition shadow-lg hover:shadow-[#01a96b]/50"
+              className="px-6 py-3 bg-[#01a96b] text-white  rounded-full  transition shadow-lg "
             >
               VIEW FULL REPORT
             </button>

@@ -78,7 +78,6 @@ const featuresData = [
     highlight: 'End-of-Term Safety',
     content:
       'Modern autocalls use barriers tested only at maturity, typically 60–70% of initial level. Capital is protected unless the index falls below this level at final maturity — loss then mirrors the index decline.',
-    span: true,
   },
 ];
 
@@ -89,7 +88,6 @@ export default function AboutSection() {
       <div className="absolute inset-0 opacity-50">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0b3d62] via-[#001f33] to-[#0b3d62]" />
       </div>
-
       <div className="container mx-auto px-6 relative z-10 max-w-screen-2xl">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-20">
           {/* Left Side */}
@@ -113,7 +111,6 @@ export default function AboutSection() {
               Autocalls.uk is a digital platform dedicated to improving transparency and understanding of structured investments in the UK market.
             </motion.p>
           </div>
-
           {/* Right Side – Benefits Card */}
           <div className="w-full lg:w-5/12">
             <motion.div
@@ -144,7 +141,7 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* Key Features Section – Matching Performance Cards Style */}
+        {/* Key Features Section */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -162,37 +159,32 @@ export default function AboutSection() {
             Key Features
           </motion.h3>
 
+          {/* First three cards (normal 1/3 layout) */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14 max-w-7xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14 max-w-7xl mx-auto mb-10 lg:mb-14"
           >
-            {featuresData.map((feature, index) => (
+            {featuresData.slice(0, 3).map((feature, index) => (
               <motion.div
                 key={index}
                 variants={itemVariants}
                 whileHover="hover"
-                className={`group relative bg-white/8 backdrop-blur-md rounded-3xl p-10 shadow-2xl border border-white/15 overflow-hidden cursor-pointer ${
-                  feature.span ? 'md:col-span-2 lg:col-span-1' : ''
-                }`}
+                className="group relative bg-white/8 backdrop-blur-md rounded-3xl p-10 shadow-2xl border border-white/15 overflow-hidden cursor-pointer"
               >
-                {/* Animated glow on hover */}
                 <motion.div
                   variants={glowVariants}
                   initial={{ opacity: 0 }}
                   whileHover="hover"
                   className="absolute inset-0 bg-gradient-to-br from-amber-400/20 via-emerald-500/20 to-transparent rounded-3xl"
                 />
-
-                {/* Subtle rotating ring */}
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
                   className="absolute -top-40 -right-40 w-96 h-96 rounded-full border-8 border-amber-300/8"
                 />
-
                 <div className="relative z-10">
                   <span className="inline-block px-5 py-2.5 bg-amber-500/25 text-amber-100 text-sm font-semibold rounded-full mb-8 border border-amber-400/30">
                     {feature.highlight}
@@ -200,7 +192,6 @@ export default function AboutSection() {
                   <h4 className="text-2xl md:text-3xl font-semibold text-white mb-8">
                     {feature.title}
                   </h4>
-
                   {feature.items ? (
                     <ul className="space-y-4 text-white/90 text-lg leading-relaxed">
                       {feature.items.map((item, i) => (
@@ -219,6 +210,44 @@ export default function AboutSection() {
               </motion.div>
             ))}
           </motion.div>
+
+          {/* Last two cards – 50/50 layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14 max-w-7xl mx-auto">
+            {featuresData.slice(3, 5).map((feature, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                whileHover="hover"
+                className="group relative bg-white/8 backdrop-blur-md rounded-3xl p-10 shadow-2xl border border-white/15 overflow-hidden cursor-pointer"
+              >
+                <motion.div
+                  variants={glowVariants}
+                  initial={{ opacity: 0 }}
+                  whileHover="hover"
+                  className="absolute inset-0 bg-gradient-to-br from-amber-400/20 via-emerald-500/20 to-transparent rounded-3xl"
+                />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+                  className="absolute -top-40 -right-40 w-96 h-96 rounded-full border-8 border-amber-300/8"
+                />
+                <div className="relative z-10">
+                  <span className="inline-block px-5 py-2.5 bg-amber-500/25 text-amber-100 text-sm font-semibold rounded-full mb-8 border border-amber-400/30">
+                    {feature.highlight}
+                  </span>
+                  <h4 className="text-2xl md:text-3xl font-semibold text-white mb-8">
+                    {feature.title}
+                  </h4>
+                  <p className="text-white/90 text-lg leading-relaxed">
+                    {feature.content}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Governance Card */}

@@ -32,7 +32,7 @@ export default function AutocallMarquee() {
         {[...items, ...items].map((item, index) => (
           <span
             key={index}
-            className="text-5xl font-medium uppercase tracking-wider text-gray-200 
+            className="text-4xl font-medium uppercase tracking-wider text-gray-200 
                        transition-all duration-500 
                        hover:text-[#01a96b] hover:drop-shadow-[0_0_20px_rgba(1,169,107,0.6)]"
           >

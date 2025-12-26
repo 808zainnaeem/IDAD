@@ -121,7 +121,7 @@ export default function Performance() {
   const [isPdfOpen, setIsPdfOpen] = useState(false);
 
   const pdfUrls = [
-    'https://example.com/performance-report-2023.pdf',
+    '/Performance.pdf',
   ];
 
   return (

@@ -6,7 +6,7 @@ import CompetenciesSection from '../Components/Home/CircleSec';
 import Quote from '../Components/Home/Quote';
 import TestimonialSection from '../Components/Home/Testiminal';
 import ContactDes from '../Components/Home/ContactDes';
-import Loader from '../Components/loader';
+import Loader from '../Components/Loader';
 
 
 

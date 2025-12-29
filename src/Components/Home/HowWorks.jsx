@@ -56,23 +56,28 @@ export default function HowWorks() {
   const steps = [
     {
       icon: TrendingUp,
-      title: "Investment linked to an index",
-      desc: "Your capital is linked to the performance of a major index, typically the FTSE 100 or FTSE CSDI.",
+      title: "Defined Returns",
+      desc: "Fixed coupons (typically 6-10% p.a.) paid at maturity if conditions are met",
     },
     {
       icon: Calendar,
-      title: "Observation dates are set",
-      desc: "Pre-defined dates (usually annually or semi-annually) where the index level is checked.",
+      title: "Multiple Maturity Opportunities",
+      desc: "Annual, or more frequent observation dates from year 1, 2 or 3",
+    },
+    {
+      icon: Shield,
+      title: "Capital Protection Barriers",
+      desc: "European-style barriers (60-70% of initial level) observed only at final maturity",
     },
     {
       icon: CheckCircle,
-      title: "Early maturity if conditions met",
-      desc: "If the index is at or above a predetermined level, the product 'autocalls' — maturing early with a fixed attractive return.",
+      title: "Early Maturity Potential",
+      desc: "Plans 'kick out' when index reaches trigger level, returning capital plus accumulated coupons",
     },
     {
       icon: Clock,
-      title: "Continues if not triggered",
-      desc: "If the condition isn't met, the investment continues to the next observation date, up to final maturity.",
+      title: "Market Resilience",
+      desc: "Typically designed to mature in flat, modestly positive or, even falling markets, never requiring strong growth",
     },
   ];
 

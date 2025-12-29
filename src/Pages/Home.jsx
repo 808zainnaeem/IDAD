@@ -10,6 +10,7 @@ import Performance from '../Components/Home/Performance';
 import HowAutocallsWorkSection from '../Components/Home/HowAutocallsWorkSection';
 import AboutSection from '../Components/Home/Aboutus';
 import TestimonialSection from '../Components/Home/Testiminal';
+import FTSECharts from '../Components/Home/TableGraph';
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -201,11 +202,10 @@ const Home = () => {
                           e.preventDefault();
                           scrollToSection(item.id);
                         }}
-                        className={`block text-lg font-medium transition-colors ${
-                          activeSection === item.id
+                        className={`block text-lg font-medium transition-colors ${activeSection === item.id
                             ? 'text-[#01a96b]'
                             : 'text-white/80 hover:text-white'
-                        }`}
+                          }`}
                       >
                         {item.label}
                       </a>
@@ -244,9 +244,8 @@ const Home = () => {
                   e.preventDefault();
                   scrollToSection(item.id);
                 }}
-                className={`text-sm font-medium transition-colors ${
-                  activeSection === item.id ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
-                }`}
+                className={`text-sm font-medium transition-colors ${activeSection === item.id ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
+                  }`}
               >
                 {item.label.toUpperCase()}
               </a>
@@ -388,9 +387,12 @@ const Home = () => {
       <section id="findings"><KeyFindings /></section>
       <section id="competencies"><CompetenciesSection /></section>
       <section id="performance">
-        <Performance onOpenModal={() => {/* your existing modal logic */}} />
+        <Performance onOpenModal={() => {/* your existing modal logic */ }} />
       </section>
       <section id="how-it-works"><HowAutocallsWorkSection /></section>
+
+      <section id="charts"><FTSECharts /></section>
+
       <section id="about"><AboutSection /></section>
       <TestimonialSection />
       <section id="contact"><ContactDes /></section>

@@ -263,7 +263,7 @@ export default function AboutSection() {
             Governance
           </h3>
           <p className="text-base md:text-lg leading-relaxed text-white/85">
-            The review is produced in collaboration with IDAD Limited, ensuring regulatory awareness and responsible communication.
+            The review is produced in collaboration with IDAD Limited, ensuring regulatory awareness and responsible communication. IDAD Limited is Authorised and Regulated by the Financial Conduct Authority
           </p>
         </motion.div>
       </div>

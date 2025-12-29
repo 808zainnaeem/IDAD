@@ -1,18 +1,9 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  Tooltip,
-  Legend,
-  ArcElement,
-  Title,
-  CategoryScale,
-  LinearScale,
-} from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels'; // ← Add this import
+import { Chart as ChartJS, Tooltip, Legend, ArcElement, Title, CategoryScale, LinearScale } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-// Register core components + datalabels plugin
 ChartJS.register(
   Tooltip,
   Legend,
@@ -20,17 +11,22 @@ ChartJS.register(
   Title,
   CategoryScale,
   LinearScale,
-  ChartDataLabels // ← Register the plugin
+  ChartDataLabels
 );
 
+// Enhanced Pie Chart with Framer Motion draw animation
 const AnimatedPieChart = () => {
+  const progress = useMotionValue(0);
+  const scale = useTransform(progress, [0, 1], [0.8, 1]);
+  const opacity = useTransform(progress, [0, 0.5, 1], [0, 0.3, 1]);
+
   const data = {
     labels: ['Stepdown', 'Defensive', 'Hurdle', 'Level'],
     datasets: [
       {
         label: '2025 Maturities',
         data: [60, 8, 2, 30],
-        backgroundColor: ['#1e7e34', '#2e8b57', '#95a5a6', '#34495e'],
+        backgroundColor: ['#01a96b', '#017555', '#2d8a6b', '#45b88f'],
         borderColor: ['#fff', '#fff', '#fff', '#fff'],
         borderWidth: 3,
       },
@@ -41,207 +37,285 @@ const AnimatedPieChart = () => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false, // We hide the external legend since labels are on the chart
-      },
+      legend: { display: false },
       tooltip: {
         callbacks: {
           label: (tooltipItem) => `${tooltipItem.label}: ${tooltipItem.raw}%`,
         },
       },
       datalabels: {
-        color: '#fff',              // Text color (white for good contrast on dark slices)
-        font: {
-          weight: 'bold',
-          size: 14,
-        },
+        color: '#fff',
+        font: { weight: 'bold', size: 14 },
         formatter: (value, context) => {
           const label = context.chart.data.labels[context.dataIndex];
-          return `${label}\n${value}%`; // Label on top line, percentage below
+          return `${label}\n${value}%`;
         },
         textAlign: 'center',
-        // Optional: hide labels on very small slices to avoid clutter
         display: (context) => {
           const value = context.dataset.data[context.dataIndex];
-          return value >= 5; // Only show if slice is 5% or larger
+          return value >= 5;
         },
       },
     },
     animation: {
       animateScale: true,
       animateRotate: true,
+      duration: 1800,
+      easing: 'easeOutQuart',
     },
   };
 
   return (
-    <div className="w-full h-full">
-      <Pie data={data} options={options} plugins={[ChartDataLabels]} />
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: '-100px' }}
+      transition={{ duration: 0.6 }}
+      className="relative w-full h-full"
+      onViewportEnter={() => progress.set(1)}
+      onViewportLeave={() => progress.set(0)}
+    >
+      <motion.div
+        style={{ scale, opacity }}
+        transition={{ duration: 1.2, ease: 'easeOut' }}
+        className="w-full h-full"
+      >
+        <Pie data={data} options={options} />
+      </motion.div>
+
+      {/* Optional subtle overlay glow on entrance */}
+      <motion.div
+        initial={{ opacity: 0.4 }}
+        animate={{ opacity: 0 }}
+        transition={{ duration: 1.5, delay: 0.5 }}
+        className="absolute inset-0 bg-gradient-to-br from-[#01a96b] to-transparent rounded-full blur-xl pointer-events-none"
+      />
+    </motion.div>
   );
 };
 
-// ... rest of your component (containerVariants, Performance function, etc.) remains unchanged
-
-const containerVariants = {
-  hidden: { opacity: 0 },
+// Card hover lift + entrance
+const cardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
   visible: {
     opacity: 1,
+    y: 0,
+    scale: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
+      duration: 0.7,
+      ease: 'easeOut',
     },
   },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
-};
-
-const chartVariants = {
-  hidden: { opacity: 0, scale: 0.8, rotate: -10 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    rotate: 0,
-    transition: { duration: 1.2, ease: 'easeOut' },
+  hover: {
+    y: -12,
+    scale: 1.03,
+    boxShadow: '0 20px 40px -10px rgba(1, 169, 107, 0.25)',
+    transition: { duration: 0.4, ease: 'easeOut' },
   },
 };
 
+// Text fade-up
+const textVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: 'easeOut' },
+  },
+};
+
+// Button pulse + hover
 const buttonVariants = {
   hover: {
     scale: 1.08,
-    boxShadow: '0 10px 25px -5px rgba(1, 169, 107, 0.3)',
-    transition: { duration: 0.3 },
+    boxShadow: '0 15px 35px -5px rgba(1, 169, 107, 0.5)',
   },
-  tap: { scale: 0.95 },
+  tap: { scale: 0.96 },
 };
 
 export default function Performance() {
   const [isPdfOpen, setIsPdfOpen] = useState(false);
-
-  const pdfUrls = [
-    '/Performance.pdf',
-  ];
+  const pdfUrls = ['/Performance.pdf'];
 
   return (
     <>
-      <section className="bg-white px-6 py-16 md:px-12 md:py-24 lg:px-24 lg:py-32 overflow-hidden">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="mx-auto"
-        >
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-10">
-            <motion.div
-              variants={itemVariants}
-              className="w-full lg:w-5/12 flex flex-col items-center"
+      <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-150px' }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+            className="text-center mb-20"
+          >
+            <motion.h1
+              className="text-5xl md:text-5xl bg-gradient-to-r from-[#01a96b] via-[#017555] to-[#018a5a] bg-clip-text text-transparent mb-6 "
+              initial={{ backgroundPosition: '0% 50%' }}
+              whileInView={{ backgroundPosition: ['0% 50%', '100% 50%'] }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
             >
+              Performance Overview
+            </motion.h1>
+            <motion.p
+              variants={textVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed"
+            >
+              Autocalls have demonstrated consistent performance across multiple market cycles, including periods of heightened volatility, economic uncertainty, and changing interest rate environments.
+            </motion.p>
+          </motion.div>
+
+          {/* Key Statistics Grid */}
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.15,
+                  delayChildren: 0.1,
+                },
+              },
+            }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+          >
+            {[
+              { title: 'Total Matured Plans', value: '338', desc: 'All matured positively in line with their stated terms', color: '#01a96b' },
+              { title: 'Average Return', value: '7.85%', desc: 'Annualised over average term of 1.98 years', color: '#017555' },
+              { title: 'Bottom Quartile', value: '6.54%', desc: 'Average annualised return p.a.', color: '#018a5a' },
+              { title: 'Top Quartile', value: '9.33%', desc: 'Average annualised return p.a.', color: '#01a96b' },
+            ].map((stat, i) => (
               <motion.div
-                variants={chartVariants}
-                className="w-full aspect-square max-w-lg lg:max-w-2xl"
+                key={i}
+                variants={cardVariants}
+                whileHover="hover"
+                className="bg-white rounded-2xl shadow-lg p-8 border-t-4 hover:shadow-2xl transition-shadow duration-500"
+                style={{ borderTopColor: stat.color }}
               >
-                <AnimatedPieChart />
+                <div className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: stat.color }}>
+                  {stat.title}
+                </div>
+                <div className="text-5xl font-bold text-gray-900 mb-3">{stat.value}</div>
+                <div className="text-sm text-gray-600 leading-relaxed">{stat.desc}</div>
               </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Insights + Chart Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+            {/* Left: Key Metrics */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
+              className="bg-white rounded-2xl shadow-lg p-10"
+            >
+              <h3 className="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-[#01a96b] pb-4 inline-block">
+                Key Performance Metrics
+              </h3>
+              <div className="space-y-6">
+                {[
+                  { label: 'At the Money Contracts', value: '8.78% p.a.', desc: 'average over 1.89 years' },
+                  { label: 'Step-Down Dominance', value: '60%', desc: 'of all maturities' },
+                  { label: 'Leading Counterparty', value: '32%', desc: 'HSBC Bank of all maturities' },
+                  { label: 'Index Performance Premium', value: '+1.84% p.a.', desc: 'FTSE CSDI over FTSE 100' },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.15, duration: 0.7 }}
+                    className="flex items-start"
+                  >
+                    <div className="w-3 h-3 bg-[#01a96b] rounded-full mt-2 mr-5 flex-shrink-0" />
+                    <div>
+                      <div className="font-semibold text-gray-900">{item.label}</div>
+                      <div className="text-gray-600">
+                        Deliver <span className="font-bold text-[#01a96b]">{item.value}</span> {item.desc}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
 
+            {/* Right: Chart */}
             <motion.div
-              variants={itemVariants}
-              className="w-full lg:w-5/12 space-y-8"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
+              className="bg-white rounded-2xl shadow-lg p-10"
             >
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                Performance Overview
-              </h2>
-              <p className="text-base md:text-lg leading-relaxed text-gray-700">
-                Autocalls have demonstrated consistent performance across multiple market cycles, including periods of heightened volatility, economic uncertainty, and changing interest rate environments.
-              </p>
-              <ul className="space-y-6 text-base md:text-lg text-gray-600">
-                <motion.li whileHover={{ x: 10 }} className="flex items-start gap-4">
-                  <span className="text-green-600 font-bold text-2xl">•</span>
-                  <span>
-                    <span className="text-gray-900 font-semibold">Average returns across 2016–2025</span>{' '}
-                    remained above <span className="text-green-600 font-bold">7% p.a.</span>
-                  </span>
-                </motion.li>
-                <motion.li whileHover={{ x: 10 }} className="flex items-start gap-4">
-                  <span className="text-green-600 font-bold text-2xl">•</span>
-                  <span>
-                    <span className="text-gray-900 font-semibold">No capital losses</span> were recorded when products were held to maturity
-                  </span>
-                </motion.li>
-                <motion.li whileHover={{ x: 10 }} className="flex items-start gap-4">
-                  <span className="text-green-600 font-bold text-2xl">•</span>
-                  <span>
-                    <span className="text-gray-900 font-semibold">FTSE-linked autocalls</span> outperformed many traditional investment alternatives
-                  </span>
-                </motion.li>
-              </ul>
-
-              <motion.button
-                onClick={() => setIsPdfOpen(true)}
-                whileHover="hover"
-                whileTap="tap"
-                variants={buttonVariants}
-                className="mt-12 px-3 py-3 md:px-14 md:py-3 border-1 rounded-full text-lg md:text-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300"
-              >
-                View Full Performance Data
-              </motion.button>
+              <h3 className="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-[#01a96b] pb-4 inline-block">
+                Maturity Distribution by Shape
+              </h3>
+              <div className="h-96">
+                <AnimatedPieChart />
+              </div>
             </motion.div>
           </div>
-        </motion.div>
-      </section>
 
-      {/* PDF Modal remains unchanged */}
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <motion.button
+              onClick={() => setIsPdfOpen(true)}
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              className="px-10 py-5 bg-gradient-to-r from-[#01a96b] via-[#017555] to-[#018a5a] text-white rounded-full text-xl font-semibold shadow-2xl hover:shadow-3xl transition-all duration-500"
+            >
+              View Full Performance Data
+            </motion.button>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* PDF Modal */}
       <AnimatePresence>
         {isPdfOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+            className="fixed inset-0 bg-black/20 bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
             onClick={() => setIsPdfOpen(false)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 50 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden"
               onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl shadow-3xl w-full max-w-5xl max-h-[92vh] overflow-hidden"
             >
-              <div className="flex items-center justify-between px-6 py-4 border-b">
-                <h3 className="text-2xl font-semibold text-gray-900">
-                  Full Performance Data
-                </h3>
+              <div className="flex items-center justify-between p-6 bg-gradient-to-r from-[#01a96b] to-[#017555]">
+                <h2 className="text-3xl font-bold text-white">Full Performance Data</h2>
                 <button
                   onClick={() => setIsPdfOpen(false)}
-                  className="p-2 rounded-full hover:bg-gray-100 transition"
+                  className="p-3 rounded-full hover:bg-white hover:bg-opacity-20 transition text-white"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-
-              <div className="flex border-b">
-                {pdfUrls.map((_, index) => (
-                  <button
-                    key={index}
-                    className="px-6 py-3 text-sm font-medium border-b-2 border-transparent hover:bg-gray-50 transition"
-                  >
-                    Report 1
-                  </button>
+              <div className="overflow-auto h-[calc(92vh-88px)]">
+                {pdfUrls.map((url, index) => (
+                  <iframe key={index} src={url} className="w-full h-full border-0" title={`Report ${index + 1}`} />
                 ))}
-              </div>
-
-              <div className="flex-1">
-                <iframe
-                  src={pdfUrls[0]}
-                  className="w-full h-full border-0"
-                  title="Performance PDF"
-                />
               </div>
             </motion.div>
           </motion.div>

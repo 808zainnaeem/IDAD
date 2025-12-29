@@ -39,7 +39,7 @@ export default function ContactDes() {
                   transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
                   className="inline-block origin-left text-[#01a96b]"
                 >
-                  capital protection
+                delivered in all but the most extreme circumstances
                 </motion.span>
               </span>
             </motion.span>

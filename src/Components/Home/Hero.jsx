@@ -5,11 +5,11 @@ export default function AutocallLanding() {
   const [logos, setLogos] = useState([]);
 
   const logoData = [
-    { name: '338 Autocalls Analysed', angle: 15 },
+    { name: '338 Maturities In 2025', angle: 15 },
     { name: '100% Positive Outcomes in 2025', angle: -20 },
     { name: '7.85% Average Annualised Return', angle: 0 },
     { name: '1.98 Year Average Term', angle: 25 },
-
+    { name: '2,000+ Maturities Over Decade', angle: -15 },
   ];
 
   useEffect(() => {

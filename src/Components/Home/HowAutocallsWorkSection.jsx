@@ -116,6 +116,8 @@ export default function HowAutocallsWorkSection() {
         </motion.div>
 
         {/* Steps Grid */}
+        <h2 className="text-3xl md:text-4xl lg:text-4xl xl:text-4xl  leading-tight text-slate-900 mb-6 tracking-tight border-b border-green-500 w-fit pb-3">Key Features</h2>
+
         <motion.div
           variants={containerVariants}
           initial="hidden"

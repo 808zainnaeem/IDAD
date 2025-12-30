@@ -22,13 +22,14 @@ const Home = () => {
   const [isFullReportOpen, setIsFullReportOpen] = useState(false);
 
   const logoData = [
-    { name: '338 Autocalls Analysed', left: 8, angle: -15 },
+    { name: '2,000+ Maturities Over Decade', left: 8, angle: -15 },
     { name: '100% Positive Outcomes in 2025', left: 22, angle: 20 },
     { name: '7.85% Average Annualised Return', left: 36, angle: -10 },
     { name: '1.98 Year Average Term', left: 50, angle: 12 },
     { name: '338 Autocalls Analysed', left: 64, angle: -18 },
-    { name: '100% Positive Outcomes in 2025', left: 78, angle: 25 },
+
   ];
+
 
   const navItems = [
     { label: 'Overview', id: 'overview' },
@@ -203,8 +204,8 @@ const Home = () => {
                           scrollToSection(item.id);
                         }}
                         className={`block text-lg font-medium transition-colors ${activeSection === item.id
-                            ? 'text-[#01a96b]'
-                            : 'text-white/80 hover:text-white'
+                          ? 'text-[#01a96b]'
+                          : 'text-white/80 hover:text-white'
                           }`}
                       >
                         {item.label}
@@ -310,17 +311,17 @@ const Home = () => {
         </div>
 
         {/* Floating Circles (Desktop & Tablet) */}
+        {/* Floating Circles (Desktop & Tablet) - Centered */}
         <div className="absolute bottom-12 left-0 right-0 hidden lg:block z-10">
-          <div className="relative h-48">
-            {logos.map((logo) => (
+          <div className="flex justify-center items-end gap-8 px-8 h-48">
+            {logos.map((logo, index) => (
               <motion.div
-                key={logo.id}
-                className="absolute pointer-events-auto"
-                style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
+                key={logo.id || index}
+                className="pointer-events-auto flex-shrink-0"
                 variants={dropVariants}
                 initial="initial"
                 animate="animate"
-                custom={logo}
+                custom={{ ...logo, angle: logo.angle || 0 }} // keep angle if needed
               >
                 <motion.div
                   className="rounded-full flex items-center justify-center shadow-2xl border-4 border-[#337543] bg-[#337543] overflow-hidden"

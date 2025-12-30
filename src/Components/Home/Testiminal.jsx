@@ -80,7 +80,7 @@ export default function TestimonialSection() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 whileHover={{ y: -16, transition: { duration: 0.4 } }}
-                className="bg-[#337543]/20 backdrop-blur-md p-8 md:p-10 rounded-2xl shadow-2xl flex-shrink-0 w-80 sm:w-96 md:w-[420px] h-auto min-h-[520px] flex flex-col border border-[#01a96b]/20"
+                className="bg-[#337543]/20 backdrop-blur-md p-8 md:p-10 rounded-2xl shadow-2xl flex-shrink-0 w-80 sm:w-96 md:w-[380px] h-auto min-h-[520px] flex flex-col border border-[#01a96b]/20"
               >
                 <motion.h3
                   initial={{ opacity: 0 }}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Tooltip, Legend, ArcElement, Title, CategoryScale, LinearScale } from 'chart.js';
@@ -14,19 +14,29 @@ ChartJS.register(
   ChartDataLabels
 );
 
-// Enhanced Pie Chart with Framer Motion draw animation
 const AnimatedPieChart = () => {
-  const progress = useMotionValue(0);
-  const scale = useTransform(progress, [0, 1], [0.8, 1]);
-  const opacity = useTransform(progress, [0, 0.5, 1], [0, 0.3, 1]);
+  const [isInView, setIsInView] = useState(false);
+  const [startAnimation, setStartAnimation] = useState(false);
+
+  const chartRef = useRef(null);
+
+  // Original order for final display
+  const originalLabels = ['Stepdown', 'Defensive', 'Hurdle', 'Level'];
+  const originalData = [60, 8, 2, 30];
+  const originalColors = ['#01a96b', '#017555', '#2d8a6b', '#45b88f'];
+
+  // Reverse data for clockwise animation effect
+  const labels = [...originalLabels].reverse();
+  const dataValues = [...originalData].reverse();
+  const colors = [...originalColors].reverse();
 
   const data = {
-    labels: ['Stepdown', 'Defensive', 'Hurdle', 'Level'],
+    labels,
     datasets: [
       {
         label: '2025 Maturities',
-        data: [60, 8, 2, 30],
-        backgroundColor: ['#01a96b', '#017555', '#2d8a6b', '#45b88f'],
+        data: startAnimation ? dataValues : [0, 0, 0, 0], // Key fix: start with 0s
+        backgroundColor: colors,
         borderColor: ['#fff', '#fff', '#fff', '#fff'],
         borderWidth: 3,
       },
@@ -40,60 +50,81 @@ const AnimatedPieChart = () => {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (tooltipItem) => `${tooltipItem.label}: ${tooltipItem.raw}%`,
+          label: (tooltipItem) =>
+            `${originalLabels[originalData.length - 1 - tooltipItem.dataIndex]}: ${tooltipItem.raw}%`,
         },
       },
       datalabels: {
         color: '#fff',
         font: { weight: 'bold', size: 14 },
         formatter: (value, context) => {
-          const label = context.chart.data.labels[context.dataIndex];
+          if (value === 0) return '';
+          const originalIndex = originalData.length - 1 - context.dataIndex;
+          const label = originalLabels[originalIndex];
           return `${label}\n${value}%`;
         },
         textAlign: 'center',
-        display: (context) => {
-          const value = context.dataset.data[context.dataIndex];
-          return value >= 5;
-        },
+        display: (context) => context.dataset.data[context.dataIndex] >= 5,
       },
     },
     animation: {
-      animateScale: true,
-      animateRotate: true,
-      duration: 1800,
+      duration: 2400,
       easing: 'easeOutQuart',
+      animateRotate: true,
+      animateScale: true,
     },
+    rotation: 0,
+    circumference: 360,
   };
+
+  useEffect(() => {
+    if (isInView) {
+      const timer = setTimeout(() => {
+        setStartAnimation(true);
+      }, 500); // 1 second delay
+
+      return () => clearTimeout(timer);
+    } else {
+      setStartAnimation(false);
+    }
+  }, [isInView]);
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6 }}
       className="relative w-full h-full"
-      onViewportEnter={() => progress.set(1)}
-      onViewportLeave={() => progress.set(0)}
+      onViewportEnter={() => setIsInView(true)}
+      onViewportLeave={() => setIsInView(false)}
+      viewport={{ once: false, margin: '-100px' }}
     >
-      <motion.div
-        style={{ scale, opacity }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
-        className="w-full h-full"
-      >
-        <Pie data={data} options={options} />
-      </motion.div>
+      {/* Render chart only when in view */}
+      {isInView && (
+        <motion.div
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.2, ease: 'easeOut', delay: 1 }} // Sync with delay
+          className="w-full h-full"
+        >
+          <Pie ref={chartRef} data={data} options={options} />
+        </motion.div>
+      )}
 
-      {/* Optional subtle overlay glow on entrance */}
+      {/* Spinner placeholder during delay */}
+      {isInView && !startAnimation && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-32 h-32 border-8 border-gray-200 border-t-[#01a96b] rounded-full animate-spin" />
+        </div>
+      )}
+
+      {/* Glow effect */}
       <motion.div
-        initial={{ opacity: 0.4 }}
+        initial={{ opacity: 0.5 }}
         animate={{ opacity: 0 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
-        className="absolute inset-0 bg-gradient-to-br from-[#01a96b] to-transparent rounded-full blur-xl pointer-events-none"
+        transition={{ duration: 1.8, delay: 1.5 }}
+        className="absolute inset-0 bg-gradient-to-br from-[#01a96b]/40 to-transparent rounded-full blur-2xl pointer-events-none"
       />
     </motion.div>
   );
 };
-
 // Card hover lift + entrance
 const cardVariants = {
   hidden: { opacity: 0, y: 40, scale: 0.95 },

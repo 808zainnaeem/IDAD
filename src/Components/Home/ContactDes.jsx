@@ -9,7 +9,7 @@ export default function ContactDes() {
 
   return (
     <>
-<div className="min-h-auto sm:min-h-auto bg-[#0b3d62] flex items-center justify-center px-6 py-16 md:py-24 lg:py-32 overflow-hidden">
+      <div className="min-h-auto sm:min-h-auto bg-[#0b3d62] flex items-center justify-center px-6 py-16 md:py-24 lg:py-32 overflow-hidden">
         <div className="max-w-6xl mx-auto text-center">
           {/* Main Headline */}
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light leading-tight mb-12 md:mb-16 text-white">
@@ -39,7 +39,7 @@ export default function ContactDes() {
                   transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
                   className="inline-block origin-left text-[#01a96b]"
                 >
-                delivered in all but the most extreme circumstances
+                  delivered in all but the most extreme circumstances
                 </motion.span>
               </span>
             </motion.span>
@@ -52,7 +52,7 @@ export default function ContactDes() {
               className="block overflow-hidden"
             >
               <span className="inline-block">
-                in volatile markets?{' '}
+
                 <motion.span
                   initial={{ opacity: 0, scale: 0, rotate: -30 }}
                   whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -65,7 +65,7 @@ export default function ContactDes() {
                     damping: 15,
                   }}
                   className="inline-flex items-center justify-center w-14 h-14 md:w-20 md:h-20 border-4 border-[#01a96b] rounded-full ml-4 align-middle relative"
-                  style={{ top: '-10px' }}
+                  style={{}}
                 >
                   <svg
                     className="w-9 h-9 md:w-12 md:h-12 text-[#01a96b]"
@@ -127,7 +127,7 @@ export default function ContactDes() {
               exit={{ scale: 0.9, y: 50, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-auto h-[80vh]"
             >
               {/* Close Button */}
               <button

@@ -5,46 +5,63 @@ export default function AutocallLanding() {
   const [logos, setLogos] = useState([]);
 
   const logoData = [
+    { name: '2,000+ Maturities Over Decade', angle: 50 }, // Forced to appear early
     { name: '338 Maturities In 2025', angle: 15 },
     { name: '100% Positive Outcomes in 2025', angle: -20 },
     { name: '7.85% Average Annualised Return', angle: 0 },
     { name: '1.98 Year Average Term', angle: 25 },
-    { name: '2,000+ Maturities Over Decade', angle: -15 },
   ];
 
   useEffect(() => {
-    const shuffled = [...logoData].sort(() => Math.random() - 0.5);
-    shuffled.forEach((logo, index) => {
-      const delay = index * 300 + Math.random() * 400;
-      setTimeout(() => {
-        setLogos((prev) => [
-          ...prev,
-          {
-            ...logo,
-            id: index,
-            left: 10 + Math.random() * 80,
-            rotateStart: Math.random() * 60 - 30,
-            rotateEnd: logo.angle,
-          },
-        ]);
-      }, delay);
-    });
+    // Put the important one first, shuffle only the remaining 4
+    const priorityLogo = logoData[0];
+    const others = [...logoData.slice(1)];
+    const shuffledOthers = others.sort(() => Math.random() - 0.5);
+
+    const finalOrder = [priorityLogo, ...shuffledOthers];
+
+    const animatedLogos = finalOrder.map((logo, index) => ({
+      ...logo,
+      index,
+      id: `logo-${index}-${logo.name.substring(0, 10)}`,
+      left: 10 + Math.random() * 80,
+      rotateStart: Math.random() * 60 - 30,
+      rotateEnd: logo.angle,
+      staggerDelay: index * 0.18,
+    }));
+
+
+    setLogos(animatedLogos);
   }, []);
 
   const dropVariants = {
     initial: {
-      y: -500,
+      y: -800,
       opacity: 0,
       rotate: (custom) => custom.rotateStart || 0,
     },
     animate: (custom) => ({
-      y: window.innerHeight - 220,
+      y: window.innerHeight - 260 - (custom.index * 40),
       opacity: 1,
       rotate: custom.rotateEnd,
       transition: {
-        y: { type: "spring", stiffness: 60, damping: 20, mass: 1.5 },
-        opacity: { duration: 0.8, delay: 0.3 },
-        rotate: { type: "spring", stiffness: 80, damping: 25, delay: 0.2 },
+        y: {
+          type: "spring",
+          stiffness: 60,
+          damping: 20,
+          mass: 1.5,
+          delay: custom.staggerDelay || 0,
+        },
+        opacity: {
+          duration: 0.8,
+          delay: (custom.staggerDelay || 0) + 0.3,
+        },
+        rotate: {
+          type: "spring",
+          stiffness: 80,
+          damping: 25,
+          delay: (custom.staggerDelay || 0) + 0.2,
+        },
       },
     }),
   };
@@ -134,11 +151,10 @@ export default function AutocallLanding() {
         </div>
       </header>
 
-      {/* DROPPING LOGOS - Desktop with enhanced hover */}
       {logos.map((logo) => (
         <motion.div
           key={logo.id}
-          className="absolute pointer-events-auto hidden lg:block z-10"
+          className="absolute pointer-events-auto z-10"
           style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
           variants={dropVariants}
           initial="initial"
@@ -146,8 +162,14 @@ export default function AutocallLanding() {
           custom={logo}
         >
           <motion.div
-            className="rounded-full flex items-center justify-center shadow-2xl border-4 border-[#337543] bg-[#337543] relative overflow-hidden"
-            style={{ width: '160px', height: '160px' }}
+            className="
+        rounded-full flex items-center justify-center
+        border-4 border-[#337543] bg-[#337543]
+        shadow-2xl relative overflow-hidden
+        w-[110px] h-[110px]
+        md:w-[130px] md:h-[130px]
+        lg:w-[160px] lg:h-[160px]
+      "
             whileHover={{
               scale: 1.2,
               y: -10,
@@ -156,48 +178,20 @@ export default function AutocallLanding() {
             }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            {/* Glow ring on hover */}
-            <motion.div
-              className="absolute inset-0 rounded-full border-4 border-transparent"
-              whileHover={{
-                boxShadow: 'inset 0 0 60px rgba(1, 169, 107, 0.4), 0 0 60px rgba(1, 169, 107, 0.6)',
-              }}
-            />
-            <span className="relative z-10 text-lg md:text-xl font-black text-white text-center leading-tight whitespace-pre-line px-6">
+            <span
+              className="
+          text-white text-center font-black leading-tight
+          text-xs px-3
+          md:text-sm md:px-4
+          lg:text-lg lg:px-6
+        "
+            >
               {logo.name}
             </span>
           </motion.div>
         </motion.div>
       ))}
 
-      {/* Tablet version */}
-      {logos.slice(0, 5).map((logo) => (
-        <motion.div
-          key={`sm-${logo.id}`}
-          className="absolute pointer-events-auto hidden md:block lg:hidden z-10"
-          style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
-          variants={dropVariants}
-          initial="initial"
-          animate="animate"
-          custom={logo}
-        >
-          <motion.div
-            className="rounded-full flex items-center justify-center shadow-xl border-4 border-[#337543] bg-[#337543]"
-            style={{ width: '120px', height: '120px' }}
-            whileHover={{
-              scale: 1.2,
-              y: -8,
-              boxShadow: '0 0 30px rgba(1, 169, 107, 0.7)',
-              borderColor: '#01ff8a',
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          >
-            <span className="text-sm font-bold text-white text-center leading-tight whitespace-pre-line px-3">
-              {logo.name}
-            </span>
-          </motion.div>
-        </motion.div>
-      ))}
 
       {/* INSET FRAME LINES */}
       <div className="absolute top-10 left-10 right-10 h-[1px] bg-[#01a96b]/20 z-0 hidden md:block"></div>
@@ -216,7 +210,7 @@ export default function AutocallLanding() {
               animate="visible"
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-none"
             >
-            The 2026 UK Autocall Review
+              The 2026 UK Autocall Review
             </motion.h1>
             <motion.h2
               custom={1}
@@ -225,8 +219,7 @@ export default function AutocallLanding() {
               animate="visible"
               className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-[#01a96b] tracking-tight leading-none"
             >
-            Evidence-based insight into the performance of FTSE-linked autocall investments.
-
+              Evidence-based insight into the performance of FTSE-linked autocall investments.
             </motion.h2>
           </div>
 
@@ -237,9 +230,9 @@ export default function AutocallLanding() {
             animate="visible"
             className="text-lg sm:text-xl md:text-1xl text-white/80 max-w-3xl mx-auto leading-relaxed mt-8"
           >
-      An independent review of UK retail autocalls maturing in 2025, 
+            An independent review of UK retail autocalls maturing in 2025,
             <br className="hidden sm:block" />
-supported by over a decade of performance data.
+            supported by over a decade of performance data.
           </motion.p>
         </div>
       </div>
@@ -250,7 +243,7 @@ supported by over a decade of performance data.
         style={{ transform: 'rotate(-35deg)', transformOrigin: 'center' }}
       ></div>
 
-      {/* CENTERED NAVIGATION - Responsive */}
+      {/* CENTERED NAVIGATION */}
       <nav className="fixed z-50 bg-white/10 backdrop-blur-lg rounded-2xl py-4 px-6 shadow-2xl
         bottom-4 left-1/2 -translate-x-1/2 w-max max-w-[90vw] 
         md:top-10 md:bottom-auto md:left-1/2 md:-translate-x-1/2">
@@ -258,9 +251,8 @@ supported by over a decade of performance data.
           {navItems.map((item) => (
             <motion.button
               key={item.label}
-              className={`relative px-6 py-3 text-[10px] md:text-xs font-medium transition-colors ${
-                item.active ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
-              }`}
+              className={`relative px-6 py-3 text-[10px] md:text-xs font-medium transition-colors ${item.active ? 'text-[#01a96b]' : 'text-white/70 hover:text-white'
+                }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

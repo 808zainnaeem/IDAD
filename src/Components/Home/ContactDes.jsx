@@ -31,7 +31,7 @@ export default function ContactDes() {
               className="block overflow-hidden"
             >
               <span className="inline-block">
-                returns with{' '}
+                returns, {' '} delivered in all but the most extreme circumstances
                 <motion.span
                   initial={{ opacity: 0, scaleX: 0 }}
                   whileInView={{ opacity: 1, scaleX: 1 }}
@@ -39,7 +39,7 @@ export default function ContactDes() {
                   transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
                   className="inline-block origin-left text-[#01a96b]"
                 >
-                  delivered in all but the most extreme circumstances
+                  {/* delivered in all but the most extreme circumstances */}
                 </motion.span>
               </span>
             </motion.span>

@@ -16,17 +16,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const FTSECapitalCharts = () => {
     const topChartData = [
-        { year: '2016', positive: 90, noReturn: 0, avgTerm: 2.4 },
-        { year: '2017', positive: 190, noReturn: 0, avgTerm: 2.4 },
-        { year: '2018', positive: 130, noReturn: 0, avgTerm: 2.3 },
-        { year: '2019', positive: 95, noReturn: 0, avgTerm: 2.3 },
-        { year: '2020', positive: 40, noReturn: 0, avgTerm: 2.4 },
-        { year: '2021', positive: 225, noReturn: 0, avgTerm: 2.5 },
-        { year: '2022', positive: 300, noReturn: 0, avgTerm: 2.5 },
-        { year: '2023', positive: 300, noReturn: 0, avgTerm: 2.5 },
-        { year: '2024', positive: 360, noReturn: 0, avgTerm: 2.4 },
-        { year: '2025', positive: 335, noReturn: 0, avgTerm: 2.2 },
-        { year: 'Decades\navg', positive: 205, noReturn: 0, avgTerm: 2.4 },
+        { year: '2016', positive: 90, noReturn: 0, avgTerm: 2.38 },
+        { year: '2017', positive: 190, noReturn: 0, avgTerm: 2.31 },
+        { year: '2018', positive: 130, noReturn: 0, avgTerm: 2.15 },
+        { year: '2019', positive: 95, noReturn: 0, avgTerm: 2.15 },
+        { year: '2020', positive: 40, noReturn: 0, avgTerm: 2.33 },
+        { year: '2021', positive: 225, noReturn: 0, avgTerm: 2.47 },
+        { year: '2022', positive: 300, noReturn: 0, avgTerm: 2.54 },
+        { year: '2023', positive: 300, noReturn: 0, avgTerm: 2.46 },
+        { year: '2024', positive: 363, noReturn: 0, avgTerm: 2.30 },  // matches table: 363 total, 363 positive
+        { year: '2025', positive: 338, noReturn: 0, avgTerm: 1.98 },  // matches table exactly
+        { year: 'Decades\navg', positive: 207, noReturn: 0, avgTerm: 2.3 }, // rounded for consistency
     ];
 
     const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
@@ -503,8 +503,15 @@ const FTSECapitalCharts = () => {
                                 onMouseLeave={() => setHoveredBarIndex(null)}
                             >
                                 <CartesianGrid strokeDasharray="5 5" stroke="#e0e0e0" />
-                                <XAxis dataKey="year" tick={{ fontSize: 14, fill: '#444' }} angle={-45} textAnchor="end" height={100} />
-                                <YAxis yAxisId="left" label={{ value: 'Issue Volume', angle: -90, position: 'insideLeft', style: { fontSize: '16px', fontWeight: 'bold' } }} domain={[0, 450]} ticks={[0, 100, 200, 300, 400]} tick={{ fill: '#01a96b' }} />
+                                <XAxis
+                                    dataKey="year"
+                                    tick={{ fontSize: 13, fill: '#444' }}
+                                    angle={-45}
+                                    textAnchor="end"
+                                    height={120}
+                                    interval={0}
+                                    tickFormatter={(value) => value === 'Decades\navg' ? 'Decade Avg.' : value}
+                                />                                <YAxis yAxisId="left" label={{ value: 'Issue Volume', angle: -90, position: 'insideLeft', style: { fontSize: '16px', fontWeight: 'bold' } }} domain={[0, 450]} ticks={[0, 100, 200, 300, 400]} tick={{ fill: '#01a96b' }} />
                                 <YAxis yAxisId="right" orientation="right" label={{ value: 'Average Term (years)', angle: 90, position: 'insideRight', style: { fontSize: '16px', fontWeight: 'bold' } }} domain={[0, 3]} ticks={[0, 1, 2, 3]} tick={{ fill: '#059669' }} />
                                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(1,169,107,0.12)' }} />
                                 <Legend wrapperStyle={{ paddingTop: '40px' }} iconType="rect" />
@@ -533,7 +540,7 @@ const FTSECapitalCharts = () => {
                                     type="monotone"
                                     dataKey="avgTerm"
                                     stroke="#059669"
-                                    strokeWidth={hoveredBarIndex !== null ? 8 : 6}
+                                    strokeWidth={hoveredBarIndex !== null ? 5 : 3}
                                     name="Avg Term (years)"
                                     dot={{ fill: '#01a96b', r: hoveredBarIndex !== null ? 12 : 10, strokeWidth: 4, stroke: '#fff' }}
                                     activeDot={{ r: 15, stroke: '#10b981', strokeWidth: 5 }}

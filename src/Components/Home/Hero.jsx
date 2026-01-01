@@ -27,7 +27,7 @@ export default function AutocallLanding() {
       left: 10 + Math.random() * 80,
       rotateStart: Math.random() * 60 - 30,
       rotateEnd: logo.angle,
-      staggerDelay: index * 0.18,
+      staggerDelay: index * 0.05,
     }));
 
 
@@ -35,35 +35,35 @@ export default function AutocallLanding() {
   }, []);
 
   const dropVariants = {
-    initial: {
-      y: -800,
-      opacity: 0,
-      rotate: (custom) => custom.rotateStart || 0,
-    },
     animate: (custom) => ({
-      y: window.innerHeight - 260 - (custom.index * 40),
+      y: window.innerHeight - 260 - custom.index * 40,
       opacity: 1,
       rotate: custom.rotateEnd,
+      scale: 1,
       transition: {
         y: {
           type: "spring",
-          stiffness: 60,
-          damping: 20,
-          mass: 1.5,
-          delay: custom.staggerDelay || 0,
-        },
-        opacity: {
-          duration: 0.8,
-          delay: (custom.staggerDelay || 0) + 0.3,
+          stiffness: 45,     // 👈 smoother
+          damping: 20,       // 👈 less bounce
+          mass: 1.6          // 👈 heavier, cinematic feel
         },
         rotate: {
           type: "spring",
-          stiffness: 80,
-          damping: 25,
-          delay: (custom.staggerDelay || 0) + 0.2,
+          stiffness: 35,
+          damping: 22
         },
+        scale: {
+          duration: 0.8,
+          ease: "easeOut"
+        },
+        opacity: {
+          duration: 0.6,
+          ease: "easeOut"
+        },
+        delay: custom.index * 0.18 + 0.4   // 👈 IMPORTANT stagger
       },
     }),
+
   };
 
   const titleVariants = {
@@ -72,9 +72,8 @@ export default function AutocallLanding() {
       opacity: 1,
       y: 0,
       transition: {
-        delay: i * 0.15 + 0.6,       // ← Much earlier start: first title at 0.6s
-        duration: 0.7,              // Slightly increased from 0.6s for smoothness
-        ease: [0.16, 1, 0.3, 1],     // Very snappy ease-out (feels fast and premium)
+
+        ease: [0.16, 0.5, 0.3, 0.5],     // Very snappy ease-out (feels fast and premium)
       },
     }),
   };
@@ -204,7 +203,6 @@ export default function AutocallLanding() {
         <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto">
           <div>
             <motion.h1
-              custom={0}
               variants={titleVariants}
               initial="hidden"
               animate="visible"
@@ -212,8 +210,8 @@ export default function AutocallLanding() {
             >
               The 2026 UK Autocall Review
             </motion.h1>
+
             <motion.h2
-              custom={1}
               variants={titleVariants}
               initial="hidden"
               animate="visible"
@@ -221,21 +219,21 @@ export default function AutocallLanding() {
             >
               Evidence-based insight into the performance of FTSE-linked autocall investments.
             </motion.h2>
-          </div>
 
-          <motion.p
-            custom={2}
-            variants={titleVariants}
-            initial="hidden"
-            animate="visible"
-            className="text-lg sm:text-xl md:text-1xl text-white/80 max-w-3xl mx-auto leading-relaxed mt-8"
-          >
-            An independent review of UK retail autocalls maturing in 2025,
-            <br className="hidden sm:block" />
-            supported by over a decade of performance data.
-          </motion.p>
+            <motion.p
+              variants={titleVariants}
+              initial="hidden"
+              animate="visible"
+              className="text-lg sm:text-xl md:text-1xl text-white/80 max-w-3xl mx-auto leading-relaxed mt-8"
+            >
+              An independent review of UK retail autocalls maturing in 2025,
+              <br className="hidden sm:block" />
+              supported by over a decade of performance data.
+            </motion.p>
+          </div>
         </div>
       </div>
+
 
       {/* DIAGONAL LINE */}
       <div

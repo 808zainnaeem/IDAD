@@ -242,6 +242,17 @@ const FTSECapitalCharts = () => {
             </div>
         </div>
     );
+    const CustomDot = ({ cx, cy }) => {
+        return (
+            <circle
+                cx={cx - 20}   // 👈 MOVE LEFT (tweak -16 to -22 if needed)
+                cy={cy}
+                r={8}
+                fill="#8BC34A"
+            />
+        );
+    };
+
     return (
         <div className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 px-4 py-12">
             <div className="max-w-7xl mx-auto">
@@ -495,10 +506,11 @@ const FTSECapitalCharts = () => {
                                                 );
                                             }
                                             return (
-                                                <text x={x} y={y} dy={16} textAnchor="middle" fill="#666" fontSize={14}>
+                                                <text x={x} y={y} dy={15} dx={-20} textAnchor="middle" fill="#666" fontSize={14}>
                                                     {payload.value}
                                                 </text>
                                             );
+
                                         }}
                                     />
 
@@ -512,9 +524,14 @@ const FTSECapitalCharts = () => {
                                         tickLine={false}
                                         label={{
                                             value: 'Maturity volume',
-                                            angle: -90,
-                                            position: 'insideLeft',
-                                            style: { fill: '#666', fontSize: 14 }
+                                            angle: 270,              // 90 instead of 270 for natural reading direction
+                                            position: 'insideRight',
+                                            dx: -50,                // Fine-tune horizontal position if needed
+                                            style: {
+                                                fill: '#666',
+                                                fontSize: 14,
+                                                textAnchor: 'middle'  // Centers the label text vertically along the axis
+                                            }
                                         }}
                                     />
 
@@ -564,8 +581,9 @@ const FTSECapitalCharts = () => {
                                         dataKey="avgTerm"
                                         stroke="transparent"
                                         strokeWidth={0}
-                                        dot={{ fill: '#8BC34A', r: 8, strokeWidth: 0 }}
+                                        dot={<CustomDot />}
                                     />
+
                                 </ComposedChart>
                             </ResponsiveContainer>
 

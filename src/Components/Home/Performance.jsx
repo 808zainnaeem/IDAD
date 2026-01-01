@@ -186,9 +186,9 @@ export default function Performance() {
               whileInView={{ backgroundPosition: ['0% 50%', '100% 50%'] }}
               transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
             >
-              Performance Overview
+              2025 Performance Overview
             </motion.h1>
-            <motion.p
+            {/* <motion.p
               variants={textVariants}
               initial="hidden"
               whileInView="visible"
@@ -196,7 +196,7 @@ export default function Performance() {
               className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed"
             >
               Autocalls have demonstrated consistent performance across multiple market cycles, including periods of heightened volatility, economic uncertainty, and changing interest rate environments.
-            </motion.p>
+            </motion.p> */}
           </motion.div>
 
           {/* Key Statistics Grid */}
@@ -268,7 +268,7 @@ export default function Performance() {
                     <div>
                       <div className="font-semibold text-gray-900">{item.label}</div>
                       <div className="text-gray-600">
-                        Deliver <span className="font-bold text-[#01a96b]">{item.value}</span> {item.desc}
+                        <span className="font-bold text-[#01a96b]">{item.value}</span> {item.desc}
                       </div>
                     </div>
                   </motion.div>

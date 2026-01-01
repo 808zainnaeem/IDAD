@@ -26,7 +26,7 @@ const Home = () => {
     { name: '100% Positive Outcomes in 2025', left: 22, angle: 20 },
     { name: '7.85% Average Annualised Return', left: 36, angle: -10 },
     { name: '1.98 Year Average Term', left: 50, angle: 12 },
-    { name: '338 Autocalls Analysed', left: 64, angle: -18 },
+    { name: '338 Maturities in 2025', left: 64, angle: -18 },
 
   ];
 
@@ -89,7 +89,16 @@ const Home = () => {
   }, []);
 
   const scrollToSection = (sectionId) => {
-    window.location.hash = sectionId;
+    if (window.lenis) {
+      window.lenis.scrollTo(`#${sectionId}`, {
+        offset: -100, // optional: adjust for fixed navbar height (tune as needed)
+        duration: 1.5, // matches your Lenis duration feel
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        // lock: true, // optional: prevents user interrupting the scroll
+      });
+    }
+    // Still update active state (your scroll listener will handle it too)
+    setActiveSection(sectionId);
     setIsMobileMenuOpen(false);
   };
 

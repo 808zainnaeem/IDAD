@@ -4,7 +4,7 @@ export default function Loader() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const duration = 2000; // 2 seconds
+    const duration = 4800; // 2 seconds
     const steps = 100;
     const increment = 100 / steps;
     const stepDuration = duration / steps;

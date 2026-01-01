@@ -72,9 +72,9 @@ export default function AutocallLanding() {
       opacity: 1,
       y: 0,
       transition: {
-        delay: i * 0.3 + 2,
-        duration: 1.4,
-        ease: [0.22, 1, 0.36, 1],
+        delay: i * 0.15 + 0.6,       // ← Much earlier start: first title at 0.6s
+        duration: 0.7,              // Slightly increased from 0.6s for smoothness
+        ease: [0.16, 1, 0.3, 1],     // Very snappy ease-out (feels fast and premium)
       },
     }),
   };

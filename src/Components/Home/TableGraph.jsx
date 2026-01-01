@@ -32,12 +32,10 @@ const FTSECapitalCharts = () => {
 
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length && label) {
-            // Find the index of the hovered year
-            const yearIndex = years.indexOf(label === 'Decade Avg.' ? 'Decade\nAvg.' : label);
+            const yearIndex = years.indexOf(label);
 
             if (yearIndex === -1) return null;
 
-            // Get the returns for this year
             const allReturn = returnsData[0].values[yearIndex];
             const upperReturn = returnsData[1].values[yearIndex];
             const lowerReturn = returnsData[2].values[yearIndex];
@@ -51,9 +49,6 @@ const FTSECapitalCharts = () => {
                     className="bg-white p-6 border border-gray-300 rounded-2xl shadow-2xl text-sm backdrop-blur-md"
                     style={{ boxShadow: '0 15px 35px rgba(0,0,0,0.18)' }}
                 >
-
-
-                    {/* Annualised Returns Section */}
                     <p className="font-semibold text-gray-700 mb-2">Average Annualised Returns</p>
                     <div className="space-y-2 ml-2">
                         <p className="flex justify-between">
@@ -113,8 +108,7 @@ const FTSECapitalCharts = () => {
         { year: '2023', positiveReturns: 294, returningCapital: 0, avgTerm: 2.50 },
         { year: '2024', positiveReturns: 362, returningCapital: 0, avgTerm: 2.40 },
         { year: '2025', positiveReturns: 336, returningCapital: 0, avgTerm: 2.00 },
-        { year: 'Decade\nAvg.', positiveReturns: 205, returningCapital: 0, avgTerm: 2.39 }
-    ];
+        { year: 'Decade Avg.', positiveReturns: 205, returningCapital: 0, avgTerm: 2.39 }];
 
     const CustomLegend = () => (
         <div style={{
@@ -456,7 +450,7 @@ const FTSECapitalCharts = () => {
                 </motion.h1>
 
                 {/* Charts Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+                <div className="flex flex-col gap-12 max-w-7xl mx-auto">
 
                     <motion.div
                         initial={{ opacity: 0, x: -100 }}

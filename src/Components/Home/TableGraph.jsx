@@ -530,13 +530,23 @@ const FTSECapitalCharts = () => {
                                         domain={[0, 3]}
                                         ticks={[0, 0.5, 1, 1.5, 2, 2.5, 3]}
                                         axisLine={{ stroke: '#999' }}
-                                        tick={{ fill: '#666', fontSize: 14 }}
+                                        tick={{
+                                            fill: '#666',
+                                            fontSize: 14,
+                                            textAnchor: 'middle'  // Centers the tick numbers horizontally
+                                        }}
                                         tickLine={false}
+                                        tickMargin={8}  // Optional: adds a little space between ticks and axis line
                                         label={{
                                             value: 'Average Term (Years)',
-                                            angle: 90,
+                                            angle: 270,              // 90 instead of 270 for natural reading direction
                                             position: 'insideRight',
-                                            style: { fill: '#666', fontSize: 14 }
+                                            dx: -10,                // Fine-tune horizontal position if needed
+                                            style: {
+                                                fill: '#666',
+                                                fontSize: 14,
+                                                textAnchor: 'middle'  // Centers the label text vertically along the axis
+                                            }
                                         }}
                                     />
                                     <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.05)' }} />
@@ -560,7 +570,7 @@ const FTSECapitalCharts = () => {
                                         dataKey="avgTerm"
                                         stroke="transparent"
                                         strokeWidth={0}
-                                        dot={{ fill: '#8BC34A', r: 12, strokeWidth: 0 }}
+                                        dot={{ fill: '#8BC34A', r: 8, strokeWidth: 0 }}
                                     />
                                 </ComposedChart>
                             </ResponsiveContainer>

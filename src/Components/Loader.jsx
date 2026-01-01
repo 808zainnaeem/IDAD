@@ -4,36 +4,44 @@ export default function Loader() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const duration = 4800; // 2 seconds
-    const steps = 100;
-    const increment = 100 / steps;
-    const stepDuration = duration / steps;
+    const duration = 3000; // 3 seconds total
+    const target = 100;
+    let startTime = null;
 
-    let currentCount = 0;
-    const timer = setInterval(() => {
-      currentCount += increment;
-      if (currentCount >= 100) {
-        setCount(100);
-        clearInterval(timer);
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+
+      // Calculate percentage based on time elapsed
+      const percentage = Math.min((progress / duration) * target, target);
+
+      // Update count (rounded down, but 100 exactly at the end)
+      setCount(Math.floor(percentage));
+
+      if (progress < duration) {
+        requestAnimationFrame(animate);
       } else {
-        setCount(Math.floor(currentCount));
+        // Force final value to 100 to avoid any floating-point issues
+        setCount(100);
       }
-    }, stepDuration);
+    };
 
-    return () => clearInterval(timer);
+    requestAnimationFrame(animate);
+
+    // Cleanup not strictly needed with rAF, but good practice
+    return () => {
+      startTime = null;
+    };
   }, []);
 
   return (
     <div className="fixed inset-0 z-[100000000] flex flex-col justify-end items-start bg-[#0b3d62] p-8 md:p-12 lg:p-20 overflow-hidden">
-      {/* New dark blue background */}
-
-      {/* Subtle gradient overlay with new accent */}
+      {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-tr from-[#01a96b]/10 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative z-10 flex items-end">
         {/* Counter Number - Bottom Left */}
         <div className="text-[#01a96b] font-light tracking-tighter drop-shadow-2xl">
-          {/* Bright teal accent */}
           <span className="text-7xl sm:text-8xl md:text-[10rem] lg:text-[14rem] xl:text-[16rem] leading-none block">
             {String(count).padStart(3, '0')}
           </span>

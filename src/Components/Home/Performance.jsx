@@ -81,7 +81,7 @@ const AnimatedPieChart = () => {
     if (isInView) {
       const timer = setTimeout(() => {
         setStartAnimation(true);
-      }, 500); // 1 second delay
+      }, 50); // 1 second delay
 
       return () => clearTimeout(timer);
     } else {

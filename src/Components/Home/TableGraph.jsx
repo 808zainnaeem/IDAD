@@ -279,7 +279,7 @@ const FTSECapitalCharts = () => {
                             Over 2,000 Maturities | 99.7% Positive Returns | 7.44% Average p.a.
                         </p>
                         <p className="text-sm text-gray-600 mt-4 max-w-4xl mx-auto px-4">
-                            *FTSE-linked – single index autocalls using, as underlying either the FTSE 100 or FTSE CSDI which tracks the same shares as FTSE 100 with the same weightings but accounts for dividends differently.
+                            UK Retail Public Offer FTSE-Linked*, Capital-at-Risk Autocall Maturities 2016 - 2025
                         </p>
                     </motion.div>
 
@@ -437,6 +437,9 @@ const FTSECapitalCharts = () => {
                                 </div>
                             </div>
                         </motion.div>
+                        <p className="text-sm text-gray-600 mt-4 max-w-4xl mx-auto px-4">
+                            *FTSE-linked – single index autocalls using, as underlying either the FTSE 100 or FTSE CSDI which tracks the same shares as FTSE 100 with the same weightings but accounts for dividends differently.
+                        </p>
                     </div>
                 </motion.div>
 

@@ -1,33 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Bar,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
     Line,
     ComposedChart,
     ResponsiveContainer,
-    Cell,
 } from 'recharts';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const FTSECapitalCharts = () => {
-    const maturityChartData = [
-        { year: '2016', positive: 90, noReturn: 1, avgTerm: 2.38 },
-        { year: '2017', positive: 210, noReturn: 0, avgTerm: 2.31 },
-        { year: '2018', positive: 150, noReturn: 0, avgTerm: 2.15 },
-        { year: '2019', positive: 110, noReturn: 0, avgTerm: 2.15 },
-        { year: '2020', positive: 60, noReturn: 0, avgTerm: 2.33 },
-        { year: '2021', positive: 235, noReturn: 0, avgTerm: 2.47 },
-        { year: '2022', positive: 320, noReturn: 0, avgTerm: 2.54 },
-        { year: '2023', positive: 310, noReturn: 5, avgTerm: 2.46 },
-        { year: '2024', positive: 390, noReturn: 0, avgTerm: 2.30 },
-        { year: '2025', positive: 369, noReturn: 0, avgTerm: 1.98 },
-        { year: 'Decade\nAvg', positive: 230.6, noReturn: 0.6, avgTerm: 2.30 },
-    ];
-
     const years = ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', 'Decade Avg.'];
 
     const maturityData = [
@@ -44,7 +28,7 @@ const FTSECapitalCharts = () => {
         { label: 'Lower quartile', values: ['5.78%', '6.23%', '6.32%', '5.71%', '5.71%', '5.45%', '5.42%', '5.04%', '6.32%', '6.54%', '5.85%'] },
     ];
 
-    const data = [
+    const chartData = [
         { year: '2016', positiveReturns: 82, returningCapital: 0, avgTerm: 2.45 },
         { year: '2017', positiveReturns: 187, returningCapital: 0, avgTerm: 2.40 },
         { year: '2018', positiveReturns: 128, returningCapital: 0, avgTerm: 2.28 },
@@ -58,47 +42,12 @@ const FTSECapitalCharts = () => {
         { year: 'Decade Avg.', positiveReturns: 205, returningCapital: 0, avgTerm: 2.39 },
     ];
 
-    const CustomTooltip = ({ active, payload, label }) => {
-        if (active && payload && payload.length && label) {
-            const yearIndex = years.indexOf(label);
-            if (yearIndex === -1) return null;
-            const allReturn = returnsData[0].values[yearIndex];
-            const upperReturn = returnsData[1].values[yearIndex];
-            const lowerReturn = returnsData[2].values[yearIndex];
-
-            return (
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9, y: -10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.25 }}
-                    className="bg-white p-6 border border-gray-300 rounded-2xl shadow-2xl text-sm backdrop-blur-md"
-                    style={{ boxShadow: '0 15px 35px rgba(0,0,0,0.18)' }}
-                >
-                    <p className="font-semibold text-gray-700 mb-2">Average Annualised Returns</p>
-                    <div className="space-y-2 ml-2">
-                        <p className="flex justify-between">
-                            <span className="text-gray-600">All:</span>
-                            <span className="font-bold text-emerald-600">{allReturn}</span>
-                        </p>
-                        <p className="flex justify-between">
-                            <span className="text-gray-600">Upper Quartile:</span>
-                            <span className="font-bold text-amber-600">{upperReturn}</span>
-                        </p>
-                        <p className="flex justify-between">
-                            <span className="text-gray-600">Lower Quartile:</span>
-                            <span className="font-bold text-blue-600">{lowerReturn}</span>
-                        </p>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-5 italic">Hover • Explore</p>
-                </motion.div>
-            );
-        }
-        return null;
-    };
+    const CustomDot = ({ cx, cy }) => (
+        <circle cx={cx} cy={cy} r={8} fill="#8BC34A" stroke="#fff" strokeWidth={2} />
+    );
 
     const CustomLegend = () => (
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mt-8 text-sm text-gray-600">
+        <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-gray-600">
             <div className="flex items-center gap-2">
                 <div className="w-4 h-4 bg-gray-800 rounded"></div>
                 <span>No. of Positive Returns</span>
@@ -114,154 +63,98 @@ const FTSECapitalCharts = () => {
         </div>
     );
 
-    const CustomDot = ({ cx, cy }) => (
-        <circle cx={cx} cy={cy} r={8} fill="#8BC34A" stroke="#fff" strokeWidth={2} />
-    );
-
     return (
         <div className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 px-4 py-12 min-h-screen">
             <div className="max-w-7xl mx-auto">
-                {/* Hero Dashboard */}
+                {/* Hero Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 80 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.2 }}
                     className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-8 mb-16"
                 >
-                    <motion.div
-                        initial={{ scale: 0.94 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1 }}
-                        className="text-center mb-12"
-                    >
+                    <div className="text-center mb-12">
                         <h2 className="text-3xl font-bold text-gray-800 mb-4">Decade Performance Dashboard</h2>
-                        <motion.div
-                            initial={{ scaleX: 0 }}
-                            whileInView={{ scaleX: 1 }}
-                            transition={{ duration: 1, delay: 0.4 }}
-                            className="w-40 h-1.5 bg-gradient-to-r from-emerald-500 to-green-600 mx-auto mb-8 rounded-full"
-                        />
+                        <div className="w-40 h-1.5 bg-gradient-to-r from-emerald-500 to-green-600 mx-auto mb-8 rounded-full" />
                         <p className="text-xl font-bold text-gray-700">Over 2,000 Maturities | 99.7% Positive Returns | 7.44% Average p.a.</p>
-                        <p className="text-sm text-gray-600 mt-4 max-w-4xl mx-auto px-4">
+                        <p className="text-sm text-gray-600 mt-4 max-w-4xl mx-auto">
                             UK Retail Public Offer FTSE-Linked*, Capital-at-Risk Autocall Maturities 2016 - 2025
                         </p>
-                    </motion.div>
+                    </div>
 
-                    <div className="space-y-16">
-                        {/* Maturity Outcomes Table - Responsive */}
+                    <div className="space-y-20">
+                        {/* Maturity Outcomes Table - NOW VISIBLE ON MOBILE */}
                         <div>
                             <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Maturity Outcomes by Year</h3>
-
-                            {/* Desktop Table */}
-                            <div className="hidden md:block overflow-x-auto rounded-2xl shadow-xl border border-gray-200">
-                                <table className="w-full min-w-[900px] text-sm bg-white">
-                                    <thead>
-                                        <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
-                                            <th className="py-5 px-8 text-left font-bold sticky left-0 bg-gray-900 z-10">Metric</th>
-                                            {years.map((year) => (
-                                                <th key={year} className="py-5 px-6 text-center font-bold">
-                                                    {year.replace('\n', ' ')}
-                                                </th>
-                                            ))}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {maturityData.map((row) => (
-                                            <tr key={row.label} className="border-b border-gray-200 hover:bg-emerald-50">
-                                                <td className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white py-5 px-8 font-semibold sticky left-0 z-10">
-                                                    {row.label}
-                                                </td>
-                                                {row.values.map((val, j) => (
-                                                    <td key={j} className="py-5 px-6 text-center text-gray-800">
-                                                        {row.label.includes('duration') ? val.toFixed(2) : val % 1 === 0 ? val : val.toFixed(1)}
-                                                    </td>
+                            <div className="overflow-x-auto rounded-2xl shadow-xl border border-gray-200 -mx-4 sm:mx-0">
+                                <div className="min-w-[800px] bg-white">
+                                    <table className="w-full text-sm">
+                                        <thead>
+                                            <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+                                                <th className="py-4 px-6 text-left font-bold sticky left-0 bg-gray-900 z-10">Metric</th>
+                                                {years.map((year) => (
+                                                    <th key={year} className="py-4 px-4 text-center font-bold whitespace-nowrap">
+                                                        {year.replace('Avg.', 'Avg')}
+                                                    </th>
                                                 ))}
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {maturityData.map((row) => (
+                                                <tr key={row.label} className="border-b border-gray-200 hover:bg-emerald-50 transition">
+                                                    <td className="py-4 px-6 font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 sticky left-0 z-10">
+                                                        {row.label}
+                                                    </td>
+                                                    {row.values.map((val, i) => (
+                                                        <td key={i} className="py-4 px-4 text-center text-gray-800">
+                                                            {row.label.includes('duration') ? val.toFixed(2) : val % 1 === 0 ? val : val.toFixed(1)}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-
-                            {/* Mobile Cards */}
-                            <div className="block md:hidden space-y-6">
-                                {years.map((year, i) => (
-                                    <motion.div
-                                        key={year}
-                                        initial={{ opacity: 0, y: 30 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: i * 0.1 }}
-                                        className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
-                                    >
-                                        <h4 className="font-bold text-lg text-center text-gray-800 mb-4">{year}</h4>
-                                        {maturityData.map((row) => (
-                                            <div key={row.label} className="flex justify-between py-2 border-b border-gray-100 last:border-0">
-                                                <span className="text-gray-600 text-sm">{row.label}</span>
-                                                <span className="font-semibold text-gray-800">
-                                                    {row.label.includes('duration') ? row.values[i].toFixed(2) : row.values[i]}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </motion.div>
-                                ))}
-                            </div>
+                            {/* Scroll hint for mobile */}
+                            <p className="text-xs text-gray-500 text-center mt-3 sm:hidden">← Scroll horizontally to view all years →</p>
                         </div>
 
-                        {/* Average Returns Table - Responsive */}
+                        {/* Average Returns Table - NOW VISIBLE ON MOBILE */}
                         <div>
                             <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Average Annualised Returns of All Maturities</h3>
-
-                            {/* Desktop Table */}
-                            <div className="hidden md:block overflow-x-auto rounded-2xl shadow-xl border border-gray-200">
-                                <table className="w-full min-w-[900px] text-sm bg-white">
-                                    <thead>
-                                        <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
-                                            <th className="py-5 px-8 text-left font-bold sticky left-0 bg-gray-900 z-10">Category</th>
-                                            {years.map((year) => (
-                                                <th key={year} className="py-5 px-6 text-center font-bold">
-                                                    {year.replace('\n', ' ')}
-                                                </th>
-                                            ))}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {returnsData.map((row) => (
-                                            <tr key={row.label} className="border-b border-gray-200 hover:bg-emerald-50">
-                                                <td className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white py-5 px-8 font-semibold sticky left-0 z-10">
-                                                    {row.label}
-                                                </td>
-                                                {row.values.map((val, j) => (
-                                                    <td key={j} className="py-5 px-6 text-center font-bold text-emerald-700">
-                                                        {val}
-                                                    </td>
+                            <div className="overflow-x-auto rounded-2xl shadow-xl border border-gray-200 -mx-4 sm:mx-0">
+                                <div className="min-w-[800px] bg-white">
+                                    <table className="w-full text-sm">
+                                        <thead>
+                                            <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+                                                <th className="py-4 px-6 text-left font-bold sticky left-0 bg-gray-900 z-10">Category</th>
+                                                {years.map((year) => (
+                                                    <th key={year} className="py-4 px-4 text-center font-bold whitespace-nowrap">
+                                                        {year.replace('Avg.', 'Avg')}
+                                                    </th>
                                                 ))}
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {returnsData.map((row) => (
+                                                <tr key={row.label} className="border-b border-gray-200 hover:bg-emerald-50 transition">
+                                                    <td className="py-4 px-6 font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 sticky left-0 z-10">
+                                                        {row.label}
+                                                    </td>
+                                                    {row.values.map((val, i) => (
+                                                        <td key={i} className="py-4 px-4 text-center font-bold text-emerald-700">
+                                                            {val}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-
-                            {/* Mobile Cards */}
-                            <div className="block md:hidden space-y-6">
-                                {years.map((year, i) => (
-                                    <motion.div
-                                        key={year}
-                                        initial={{ opacity: 0, y: 30 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: i * 0.1 }}
-                                        className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
-                                    >
-                                        <h4 className="font-bold text-lg text-center text-gray-800 mb-4">{year}</h4>
-                                        {returnsData.map((row) => (
-                                            <div key={row.label} className="flex justify-between py-2 border-b border-gray-100 last:border-0">
-                                                <span className="text-gray-600 text-sm">{row.label}</span>
-                                                <span className="font-bold text-emerald-700">{row.values[i]}</span>
-                                            </div>
-                                        ))}
-                                    </motion.div>
-                                ))}
-                            </div>
+                            <p className="text-xs text-gray-500 text-center mt-3 sm:hidden">← Scroll horizontally to view all years →</p>
                         </div>
 
                         <p className="text-sm text-gray-600 mt-12 text-center italic max-w-4xl mx-auto px-4">
@@ -272,93 +165,97 @@ const FTSECapitalCharts = () => {
 
                 {/* Main Title */}
                 <motion.h1
-                    initial={{ opacity: 0, scale: 0.88 }}
+                    initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1.3 }}
-                    className="text-3xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700 mb-20"
+                    className="text-3xl font-bold text-center mb-20 bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700 text-transparent bg-clip-text"
                 >
                     UK Retail Public Offer FTSE-Linked, Capital-at-Risk Autocall Maturities 2016 – 2025
                 </motion.h1>
+                <h2 className="text-2xl font-bold text-gray-800 mb-10 text-center">Maturity Volume & Average Duration</h2>
 
-                {/* Interactive Chart - Now works on all devices */}
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1 }}
-                    className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8 mb-12"
-                >
-                    <h2 className="text-2xl font-bold text-gray-800 mb-10 text-center">Maturity Volume & Average Duration</h2>
+                {/* Chart - Bottom-to-Top Animation */}
+                <div className="hidden lg:block" style={{ width: '100%', height: '80%', padding: '0px 20px', backgroundColor: '#fff' }}>
 
-                    <ResponsiveContainer width="100%" height={420}>
-                        <ComposedChart
-                            data={data}
-                            margin={{ top: 20, right: 30, bottom: 40, left: 20 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                            <XAxis
-                                dataKey="year"
-                                tick={{ fill: '#666', fontSize: 13 }}
-                                axisLine={{ stroke: '#ccc' }}
-                                tickLine={false}
-                                angle={-45}
-                                textAnchor="end"
-                                height={80}
-                            />
-                            <YAxis
-                                yAxisId="left"
-                                orientation="left"
-                                domain={[0, 400]}
-                                ticks={[0, 100, 200, 300, 400]}
-                                label={{ value: 'Maturity Volume', angle: -90, position: 'insideLeft', style: { fill: '#666' } }}
-                            />
-                            <YAxis
-                                yAxisId="right"
-                                orientation="right"
-                                domain={[0, 3]}
-                                ticks={[0, 0.5, 1, 1.5, 2, 2.5, 3]}
-                                label={{ value: 'Average Term (Years)', angle: 90, position: 'insideRight', style: { fill: '#666' } }}
-                            />
-                            <Tooltip cursor={{ fill: 'rgba(0,0,0,0.05)' }} />
-                            <Bar
-                                yAxisId="left"
-                                dataKey="positiveReturns"
-                                fill="#333"
-                                barSize={30}
-                                animationBegin={0}
-                                animationDuration={1200}
-                                isAnimationActive={true}
-                                // Bottom-to-top animation
-                                animationEasing="ease-out"
-                            />
-                            <Bar
-                                yAxisId="left"
-                                dataKey="returningCapital"
-                                fill="#999"
-                                barSize={30}
-                                animationBegin={300}
-                                animationDuration={1200}
-                            />
-                            <Line
-                                yAxisId="right"
-                                type="monotone"
-                                dataKey="avgTerm"
-                                stroke="#8BC34A"
-                                strokeWidth={4}
-                                dot={<CustomDot />}
-                                activeDot={{ r: 10 }}
-                                animationBegin={600}
-                                animationDuration={1400}
-                            />
-                        </ComposedChart>
-                    </ResponsiveContainer>
+                    <motion.div
+                        initial={{ opacity: 0, y: 60 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8"
+                    >
 
-                    <CustomLegend />
-                </motion.div>
+                        <ResponsiveContainer width="100%" height={450}>
+                            <ComposedChart data={chartData} margin={{ top: 20, right: 30, bottom: 60, left: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+                                <XAxis
+                                    dataKey="year"
+                                    tick={{ fill: '#666', fontSize: 13 }}
+                                    axisLine={{ stroke: '#ccc' }}
+                                    tickLine={false}
+                                    angle={-45}
+                                    textAnchor="end"
+                                    height={80}
+                                />
+                                <YAxis
+                                    yAxisId="left"
+                                    domain={[0, 400]}
+                                    ticks={[0, 100, 200, 300, 400]}
+                                    label={{ value: 'Maturity Volume', angle: -90, position: 'insideLeft', style: { fill: '#666' } }}
+                                />
+                                <YAxis
+                                    yAxisId="right"
+                                    orientation="right"
+                                    domain={[0, 3]}
+                                    ticks={[0, 0.5, 1, 1.5, 2, 2.5, 3]}
+                                    label={{ value: 'Average Term (Years)', angle: 90, position: 'insideRight', style: { fill: '#666' } }}
+                                />
+                                <Tooltip cursor={{ fill: 'rgba(0,0,0,0.05)' }} />
 
-                {/* Placeholder for other charts */}
-                <div className="grid md:grid-cols-2 gap-12">
+                                {/* Bars animate from bottom to top */}
+                                <Bar
+                                    yAxisId="left"
+                                    dataKey="positiveReturns"
+                                    fill="#333"
+                                    barSize={35}
+                                    animationDuration={1400}
+                                    animationEasing="ease-out"
+                                />
+                                <Bar
+                                    yAxisId="left"
+                                    dataKey="returningCapital"
+                                    fill="#999"
+                                    barSize={35}
+                                    animationBegin={400}
+                                    animationDuration={1400}
+                                />
+                                <Line
+                                    yAxisId="right"
+                                    type="monotone"
+                                    dataKey="avgTerm"
+                                    stroke="#8BC34A"
+                                    strokeWidth={4}
+                                    dot={<CustomDot />}
+                                    animationDuration={1600}
+                                />
+                            </ComposedChart>
+                        </ResponsiveContainer>
+
+                        <CustomLegend />
+                    </motion.div>
+                </div>
+                <div className="block lg:hidden w-full">
+                    {/* <h2 className="text-2xl sm:text-2xl text-gray-800 mb-10 text-center">
+                        FTSE Only Capital at Risk Autocall Plans
+                    </h2> */}
+                    <img
+                        src="/chartbar.jpg"
+                        alt="Maturity Volume & Average Duration (2016–2025)"
+                        className="w-full h-40 rounded-xl shadow-lg"
+                    />
+                </div>
+
+                {/* Other Charts (Images) */}
+                <div className="grid md:grid-cols-2 gap-12 mt-12">
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -367,7 +264,7 @@ const FTSECapitalCharts = () => {
                         <h2 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-emerald-600 to-green-700 text-transparent bg-clip-text">
                             Monthly Distribution of Annualised Returns (Decade)
                         </h2>
-                        <img src="/chart2.jpg" alt="Monthly returns distribution" className="w-full rounded-xl shadow" />
+                        <img src="/chart2.jpg" alt="Monthly returns" className="w-full rounded-xl shadow" />
                     </motion.div>
 
                     <motion.div
@@ -379,7 +276,7 @@ const FTSECapitalCharts = () => {
                         <h2 className="text-2xl font-bold text-center mb-8 bg-gradient-to-r from-emerald-600 to-green-700 text-transparent bg-clip-text">
                             2025 Maturity Performance by Shape
                         </h2>
-                        <img src="/chart3.jpg" alt="2025 performance by shape" className="w-full rounded-xl shadow" />
+                        <img src="/chart3.jpg" alt="2025 performance" className="w-full rounded-xl shadow" />
                     </motion.div>
                 </div>
             </div>

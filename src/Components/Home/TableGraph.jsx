@@ -289,16 +289,14 @@ const FTSECapitalCharts = () => {
                     </motion.div>
 
                     <div className="space-y-16">
-                        {/* Maturity Outcomes */}
+                        {/* Maturity Outcomes Table - Unified Responsive Design */}
                         <div>
                             <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">
                                 Maturity Outcomes by Year
                             </h3>
-
-                            {/* Desktop Table */}
-                            <div className="hidden md:block rounded-2xl shadow-xl border border-gray-200 overflow-hidden bg-white">
+                            <div className="rounded-2xl shadow-xl border border-gray-200 overflow-hidden bg-white">
                                 <div className="overflow-x-auto">
-                                    <table className="w-full border-collapse text-sm bg-white">
+                                    <table className="w-full min-w-[900px] border-collapse text-sm bg-white">
                                         <thead>
                                             <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
                                                 <th className="py-5 px-8 text-left font-bold sticky left-0 z-10 bg-gray-900">
@@ -335,64 +333,16 @@ const FTSECapitalCharts = () => {
                                     </table>
                                 </div>
                             </div>
-
-                            {/* Mobile - Accordion Cards (ALL OPEN BY DEFAULT) */}
-                            <div className="md:hidden space-y-5">
-                                {years.map((year, yearIndex) => (
-                                    <details
-                                        key={year}
-                                        open // ← This makes it open by default
-                                        className="group bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300"
-                                    >
-                                        <summary className="flex justify-between items-center px-6 py-5 cursor-pointer bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold text-lg">
-                                            <span>{year.replace('\n', ' ')}</span>
-                                            <span className="transition-transform group-open:rotate-180">▼</span>
-                                        </summary>
-
-                                        <div className="p-6 space-y-6">
-                                            {maturityData.map((row, rowIndex) => {
-                                                const value = row.values[yearIndex];
-                                                const formatted =
-                                                    row.label.includes('duration')
-                                                        ? value.toFixed(2)
-                                                        : Number.isInteger(value)
-                                                            ? value
-                                                            : value.toFixed(1);
-
-                                                const maxValue = Math.max(...row.values);
-                                                const percentage = maxValue > 0 ? (value / maxValue) * 100 : 0;
-
-                                                return (
-                                                    <div key={rowIndex} className="space-y-2">
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="font-semibold text-gray-700">{row.label}</span>
-                                                            <span className="font-bold text-emerald-700">{formatted}</span>
-                                                        </div>
-                                                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                            <div
-                                                                className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-500"
-                                                                style={{ width: `${percentage}%` }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </details>
-                                ))}
-                            </div>
                         </div>
 
-                        {/* Average Annualised Returns */}
+                        {/* Average Annualised Returns Table - Same Unified Style */}
                         <div>
                             <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">
                                 Average Annualised Returns of All Maturities
                             </h3>
-
-                            {/* Desktop Table */}
-                            <div className="hidden md:block rounded-2xl shadow-xl border border-gray-200 overflow-hidden bg-white">
+                            <div className="rounded-2xl shadow-xl border border-gray-200 overflow-hidden bg-white">
                                 <div className="overflow-x-auto">
-                                    <table className="w-full border-collapse text-sm bg-white">
+                                    <table className="w-full min-w-[900px] border-collapse text-sm bg-white">
                                         <thead>
                                             <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
                                                 <th className="py-5 px-8 text-left font-bold sticky left-0 z-10 bg-gray-900">
@@ -425,35 +375,10 @@ const FTSECapitalCharts = () => {
                                     </table>
                                 </div>
                             </div>
-
-                            {/* Mobile - Accordion Cards (ALL OPEN BY DEFAULT) */}
-                            <div className="md:hidden space-y-5">
-                                {years.map((year, yearIndex) => (
-                                    <details
-                                        key={year}
-                                        open // ← Open by default
-                                        className="group bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden"
-                                    >
-                                        <summary className="flex justify-between items-center px-6 py-5 cursor-pointer bg-gradient-to-r from-gray-800 to-gray-900 text-white font-semibold text-lg">
-                                            <span>{year.replace('\n', ' ')}</span>
-                                            <span className="transition-transform group-open:rotate-180">▼</span>
-                                        </summary>
-
-                                        <div className="p-6 space-y-5">
-                                            {returnsData.map((row, rowIndex) => (
-                                                <div key={rowIndex} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
-                                                    <span className="font-semibold text-gray-700">{row.label}</span>
-                                                    <span className="font-bold text-emerald-700 text-lg">{row.values[yearIndex]}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </details>
-                                ))}
-                            </div>
                         </div>
 
                         <p className="text-sm text-gray-600 mt-8 max-w-4xl mx-auto px-4 text-center italic">
-                            *FTSE-linked – single index autocalls using, as underlying either the FTSE 100 or FTSE CSDI...
+                            *FTSE-linked – single index autocalls using, as underlying either the FTSE 100 or FTSE CSDI which tracks the same shares as FTSE 100 with the same weightings but accounts for dividends differently.
                         </p>
                     </div>
                 </motion.div>

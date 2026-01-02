@@ -91,12 +91,14 @@ const Home = () => {
   const scrollToSection = (sectionId) => {
     if (window.lenis) {
       window.lenis.scrollTo(`#${sectionId}`, {
-        offset: -100,
-        duration: 1.5,
+        offset: -100, // optional: adjust for fixed navbar height (tune as needed)
+        duration: 1.5, // matches your Lenis duration feel
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        // lock: true, // optional: prevents user interrupting the scroll
       });
     }
-    setActiveSection(sectionId); // Immediate update for instant feedback
+    // Still update active state (your scroll listener will handle it too)
+    setActiveSection(sectionId);
     setIsMobileMenuOpen(false);
   };
 

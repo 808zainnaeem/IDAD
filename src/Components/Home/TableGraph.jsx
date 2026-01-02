@@ -289,98 +289,198 @@ const FTSECapitalCharts = () => {
                     </motion.div>
 
                     <div className="space-y-16">
-                        {/* Maturity Outcomes Table - Unified Responsive Design */}
-                        <div>
+
+                        {/* =====================================================
+       Maturity Outcomes
+    ====================================================== */}
+
+                        {/* ---------- MOBILE (CARDS) ---------- */}
+                        <div className="sm:hidden space-y-6">
+                            <h3 className="text-xl font-bold text-gray-800 text-center">
+                                Maturity Outcomes by Year
+                            </h3>
+
+                            {maturityData.map((row, i) => (
+                                <div
+                                    key={i}
+                                    className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
+                                >
+                                    <div className="bg-emerald-600 text-white px-4 py-3 font-semibold">
+                                        {row.label}
+                                    </div>
+
+                                    <div className="divide-y">
+                                        {row.values.map((val, j) => (
+                                            <div
+                                                key={j}
+                                                className="flex justify-between items-center px-4 py-3 text-sm"
+                                            >
+                                                <span className="text-gray-500">
+                                                    {years[j].replace('\n', ' ')}
+                                                </span>
+                                                <span className="font-semibold text-gray-800">
+                                                    {row.label.includes('duration')
+                                                        ? val.toFixed(2)
+                                                        : Number.isInteger(val)
+                                                            ? val
+                                                            : val.toFixed(1)}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* ---------- DESKTOP (TABLE) ---------- */}
+                        <div className="hidden sm:block">
                             <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">
                                 Maturity Outcomes by Year
                             </h3>
-                            <div className="rounded-2xl shadow-xl border border-gray-200 overflow-hidden bg-white">
-                                <div className="overflow-x-auto">
-                                    <table className="w-full min-w-[900px] border-collapse text-sm bg-white">
-                                        <thead>
-                                            <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
-                                                <th className="py-5 px-8 text-left font-bold sticky left-0 z-10 bg-gray-900">
-                                                    Metric
+
+                            <div className="rounded-2xl shadow-xl border border-gray-200 bg-white overflow-x-auto">
+                                <table className="w-full min-w-[900px] border-collapse text-sm bg-white">
+                                    <thead>
+                                        <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+                                            <th className="py-5 px-8 text-left font-bold sticky left-0 bg-gray-900 z-10">
+                                                Metric
+                                            </th>
+                                            {years.map((year, i) => (
+                                                <th
+                                                    key={i}
+                                                    className="py-5 px-6 text-center font-bold"
+                                                >
+                                                    {year.replace('\n', ' ')}
                                                 </th>
-                                                {years.map((year, i) => (
-                                                    <th key={i} className="py-5 px-6 text-center font-bold">
-                                                        {year.replace('\n', ' ')}
-                                                    </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {maturityData.map((row, i) => (
+                                            <tr
+                                                key={i}
+                                                className="border-b border-gray-200 hover:bg-emerald-50 transition-all"
+                                            >
+                                                <td className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white py-5 px-8 font-semibold sticky left-0 z-10">
+                                                    {row.label}
+                                                </td>
+
+                                                {row.values.map((val, j) => (
+                                                    <td
+                                                        key={j}
+                                                        className="py-5 px-6 text-center font-medium text-gray-800"
+                                                    >
+                                                        {row.label.includes('duration')
+                                                            ? val.toFixed(2)
+                                                            : Number.isInteger(val)
+                                                                ? val
+                                                                : val.toFixed(1)}
+                                                    </td>
                                                 ))}
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {maturityData.map((row, i) => (
-                                                <tr
-                                                    key={i}
-                                                    className="border-b border-gray-200 hover:bg-emerald-50 transition-all duration-300"
-                                                >
-                                                    <td className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white py-5 px-8 font-semibold sticky left-0 z-10 shadow-lg">
-                                                        {row.label}
-                                                    </td>
-                                                    {row.values.map((val, j) => (
-                                                        <td key={j} className="py-5 px-6 text-center font-medium text-gray-800">
-                                                            {row.label.includes('duration')
-                                                                ? val.toFixed(2)
-                                                                : Number.isInteger(val)
-                                                                    ? val
-                                                                    : val.toFixed(1)}
-                                                        </td>
-                                                    ))}
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
-                        {/* Average Annualised Returns Table - Same Unified Style */}
-                        <div>
+                        {/* =====================================================
+       Average Annualised Returns
+    ====================================================== */}
+
+                        {/* ---------- MOBILE (CARDS) ---------- */}
+                        <div className="sm:hidden space-y-6">
+                            <h3 className="text-xl font-bold text-gray-800 text-center">
+                                Average Annualised Returns of All Maturities
+                            </h3>
+
+                            {returnsData.map((row, i) => (
+                                <div
+                                    key={i}
+                                    className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
+                                >
+                                    <div className="bg-emerald-600 text-white px-4 py-3 font-semibold">
+                                        {row.label}
+                                    </div>
+
+                                    <div className="divide-y">
+                                        {row.values.map((val, j) => (
+                                            <div
+                                                key={j}
+                                                className="flex justify-between items-center px-4 py-3 text-sm"
+                                            >
+                                                <span className="text-gray-500">
+                                                    {years[j].replace('\n', ' ')}
+                                                </span>
+                                                <span className="font-bold text-emerald-700">
+                                                    {val}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* ---------- DESKTOP (TABLE) ---------- */}
+                        <div className="hidden sm:block">
                             <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">
                                 Average Annualised Returns of All Maturities
                             </h3>
-                            <div className="rounded-2xl shadow-xl border border-gray-200 overflow-hidden bg-white">
-                                <div className="overflow-x-auto">
-                                    <table className="w-full min-w-[900px] border-collapse text-sm bg-white">
-                                        <thead>
-                                            <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
-                                                <th className="py-5 px-8 text-left font-bold sticky left-0 z-10 bg-gray-900">
-                                                    Category
+
+                            <div className="rounded-2xl shadow-xl border border-gray-200 bg-white overflow-x-auto">
+                                <table className="w-full min-w-[900px] border-collapse text-sm bg-white">
+                                    <thead>
+                                        <tr className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+                                            <th className="py-5 px-8 text-left font-bold sticky left-0 bg-gray-900 z-10">
+                                                Category
+                                            </th>
+                                            {years.map((year, i) => (
+                                                <th
+                                                    key={i}
+                                                    className="py-5 px-6 text-center font-bold"
+                                                >
+                                                    {year.replace('\n', ' ')}
                                                 </th>
-                                                {years.map((year, i) => (
-                                                    <th key={i} className="py-5 px-6 text-center font-bold">
-                                                        {year.replace('\n', ' ')}
-                                                    </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {returnsData.map((row, i) => (
+                                            <tr
+                                                key={i}
+                                                className="border-b border-gray-200 hover:bg-emerald-50 transition-all"
+                                            >
+                                                <td className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white py-5 px-8 font-semibold sticky left-0 z-10">
+                                                    {row.label}
+                                                </td>
+
+                                                {row.values.map((val, j) => (
+                                                    <td
+                                                        key={j}
+                                                        className="py-5 px-6 text-center font-bold text-emerald-700"
+                                                    >
+                                                        {val}
+                                                    </td>
                                                 ))}
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {returnsData.map((row, i) => (
-                                                <tr
-                                                    key={i}
-                                                    className="border-b border-gray-200 hover:bg-emerald-50 transition-all duration-300"
-                                                >
-                                                    <td className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white py-5 px-8 font-semibold sticky left-0 z-10 shadow-lg">
-                                                        {row.label}
-                                                    </td>
-                                                    {row.values.map((val, j) => (
-                                                        <td key={j} className="py-5 px-6 text-center font-bold text-emerald-700">
-                                                            {val}
-                                                        </td>
-                                                    ))}
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
+                        {/* =====================================================
+       FOOTER NOTE
+    ====================================================== */}
                         <p className="text-sm text-gray-600 mt-8 max-w-4xl mx-auto px-4 text-center italic">
                             *FTSE-linked – single index autocalls using, as underlying either the FTSE 100 or FTSE CSDI which tracks the same shares as FTSE 100 with the same weightings but accounts for dividends differently.
                         </p>
+
                     </div>
+
                 </motion.div>
 
                 {/* Main Title */}

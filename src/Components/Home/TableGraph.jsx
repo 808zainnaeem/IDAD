@@ -423,7 +423,7 @@ const FTSECapitalCharts = () => {
                             ))}
                         </div>
 
-                        {/* ---------- DESKTOP (TABLE) ---------- */}
+                        {/* ---------- DESKTOP (TABLE) okkkkkkkkkkkkkk---------- */}
                         <div className="hidden sm:block">
                             <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">
                                 Average Annualised Returns of All Maturities

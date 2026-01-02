@@ -91,14 +91,12 @@ const Home = () => {
   const scrollToSection = (sectionId) => {
     if (window.lenis) {
       window.lenis.scrollTo(`#${sectionId}`, {
-        offset: -100, // optional: adjust for fixed navbar height (tune as needed)
-        duration: 1.5, // matches your Lenis duration feel
+        offset: -100,
+        duration: 1.5,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        // lock: true, // optional: prevents user interrupting the scroll
       });
     }
-    // Still update active state (your scroll listener will handle it too)
-    setActiveSection(sectionId);
+    setActiveSection(sectionId); // Immediate update for instant feedback
     setIsMobileMenuOpen(false);
   };
 
@@ -122,7 +120,7 @@ const Home = () => {
       opacity: 1,
       y: 0,
       transition: {
-        delay: i * 0.3 + 2,
+        delay: i * 0.3 + 1,
         duration: 1.4,
         ease: [0.22, 1, 0.36, 1],
       },
@@ -319,73 +317,163 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Floating Circles (Desktop & Tablet) */}
-        {/* Floating Circles (Desktop & Tablet) - Centered */}
-        <div className="absolute bottom-12 left-0 right-0 hidden lg:block z-10">
-          <div className="flex justify-center items-end gap-8 px-8 h-48">
-            {logos.map((logo, index) => (
-              <motion.div
-                key={logo.id || index}
-                className="pointer-events-auto flex-shrink-0"
-                variants={dropVariants}
-                initial="initial"
-                animate="animate"
-                custom={{ ...logo, angle: logo.angle || 0 }} // keep angle if needed
-              >
+
+        {/* ==================== FLOATING CIRCLES – RESPONSIVE ==================== */}
+        <div className="absolute inset-0 pointer-events-none z-10">
+          <div className="relative w-full h-full">
+
+            {/* ---------- MOBILE: 2 on top, 3 on bottom at the bottom of screen ---------- */}
+            <div className="lg:hidden absolute bottom-8 left-0 right-0 px-4">
+              <div className="flex flex-col items-center gap-4">
+                {/* Top row: 2 circles */}
+                <div className="flex justify-center gap-6">
+                  {logos.slice(0, 2).map((logo, idx) => (
+                    <motion.div
+                      key={logo.id ?? idx}
+                      className="pointer-events-auto"
+                      variants={dropVariants}
+                      initial="initial"
+                      animate="animate"
+                      custom={{ ...logo, angle: logo.angle ?? 0 }}
+                    >
+                      <motion.div
+                        className="
+                  rounded-full flex items-center justify-center
+                  border-4 border-[#337543] bg-[#337543]/95
+                  backdrop-blur-sm shadow-xl overflow-hidden
+                "
+                        style={{ width: '80px', height: '80px' }}
+                        whileHover={{
+                          scale: 1.18,
+                          y: -8,
+                          boxShadow: '0 0 30px rgba(1,169,107,0.8)',
+                          borderColor: '#01ff8a',
+                        }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <span className="text-[10px] leading-[1.15] font-black text-white text-center px-2">
+                          {logo.name}
+                        </span>
+                      </motion.div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Bottom row: 3 circles */}
+                <div className="flex justify-center gap-5">
+                  {logos.slice(2, 5).map((logo, idx) => (
+                    <motion.div
+                      key={logo.id ?? idx + 2}
+                      className="pointer-events-auto"
+                      variants={dropVariants}
+                      initial="initial"
+                      animate="animate"
+                      custom={{ ...logo, angle: logo.angle ?? 0 }}
+                    >
+                      <motion.div
+                        className="
+                  rounded-full flex items-center justify-center
+                  border-4 border-[#337543] bg-[#337543]/95
+                  backdrop-blur-sm shadow-xl overflow-hidden
+                "
+                        style={{ width: '80px', height: '80px' }}
+                        whileHover={{
+                          scale: 1.18,
+                          y: -8,
+                          boxShadow: '0 0 30px rgba(1,169,107,0.8)',
+                          borderColor: '#01ff8a',
+                        }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <span className="text-[10px] leading-[1.15] font-black text-white text-center px-2">
+                          {logo.name}
+                        </span>
+                      </motion.div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* ---------- DESKTOP: Original large horizontal row at bottom ---------- */}
+            <div className="hidden lg:flex justify-center items-end gap-10 px-8 absolute bottom-12 left-0 right-0 h-48">
+              {logos.map((logo, idx) => (
                 <motion.div
-                  className="rounded-full flex items-center justify-center shadow-2xl border-4 border-[#337543] bg-[#337543] overflow-hidden"
-                  style={{ width: '160px', height: '160px' }}
-                  whileHover={{
-                    scale: 1.2,
-                    y: -20,
-                    boxShadow: '0 0 40px rgba(1, 169, 107, 0.8)',
-                    borderColor: '#01ff8a',
-                  }}
-                  animate={{
-                    y: [0, -15, 0],
-                    boxShadow: ['0 0 20px rgba(1, 169, 107, 0.4)', '0 0 35px rgba(1, 169, 107, 0.7)', '0 0 20px rgba(1, 169, 107, 0.4)'],
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+                  key={logo.id ?? idx}
+                  className="pointer-events-auto flex-shrink-0"
+                  variants={dropVariants}
+                  initial="initial"
+                  animate="animate"
+                  custom={{ ...logo, angle: logo.angle ?? 0 }}
                 >
-                  <span className="text-lg md:text-xl font-black text-white text-center leading-tight px-6">
-                    {logo.name}
-                  </span>
+                  <motion.div
+                    className="
+              rounded-full flex items-center justify-center
+              border-4 border-[#337543] bg-[#337543]
+              shadow-2xl overflow-hidden
+            "
+                    style={{ width: '160px', height: '160px' }}
+                    whileHover={{
+                      scale: 1.2,
+                      y: -20,
+                      boxShadow: '0 0 40px rgba(1,169,107,0.8)',
+                      borderColor: '#01ff8a',
+                    }}
+                    animate={{
+                      y: [0, -15, 0],
+                      boxShadow: [
+                        '0 0 20px rgba(1,169,107,0.4)',
+                        '0 0 35px rgba(1,169,107,0.7)',
+                        '0 0 20px rgba(1,169,107,0.4)',
+                      ],
+                    }}
+                    transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+                  >
+                    <span className="text-lg font-black text-white text-center leading-tight px-6">
+                      {logo.name}
+                    </span>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Hero Content */}
         <div className="relative z-20 h-screen flex flex-col items-center justify-center text-center px-6">
-          <div className="space-y-6 md:space-y-8 max-w-5xl mx-auto mb-0 md:mb-30">
+          <div className="space-y-5 sm:space-y-6 md:space-y-8 max-w-5xl mx-auto">
+            {/* Main Title - Smaller on mobile */}
             <motion.h1
               custom={0}
               variants={titleVariants}
               initial="hidden"
               animate="visible"
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-none"
+              className="text-2xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight leading-tight"
             >
               The 2026 UK Autocall Review
             </motion.h1>
+
+            {/* Subtitle - Reduced on mobile */}
             <motion.h2
               custom={1}
               variants={titleVariants}
               initial="hidden"
               animate="visible"
-              className="text-3xl sm:text-4xl md:text-5xl font-light text-[#01a96b] tracking-tight leading-none"
+              className="text-1xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-[#01a96b] tracking-tight leading-tight mt-2"
             >
               Evidence-based insight into the performance of FTSE-linked autocall investments.
             </motion.h2>
+
+            {/* Description Paragraph - Compact on mobile */}
             <motion.p
               custom={2}
               variants={titleVariants}
               initial="hidden"
               animate="visible"
-              className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mt-8"
+              className="text-[14px] sm:text-lg md:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mt-6 sm:mt-8"
             >
               An independent review of UK retail autocalls maturing in 2025,
-              <br className="hidden sm:block" />
+              <br className="hidden xs:block" />
               supported by over a decade of performance data.
             </motion.p>
           </div>

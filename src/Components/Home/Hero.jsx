@@ -36,34 +36,30 @@ export default function AutocallLanding() {
 
   const dropVariants = {
     animate: (custom) => ({
-      y: window.innerHeight - 260 - custom.index * 40,
+      y: 0, // We now use top position instead of y translate
       opacity: 1,
       rotate: custom.rotateEnd,
       scale: 1,
       transition: {
-        y: {
-          type: "spring",
-          stiffness: 45,     // 👈 smoother
-          damping: 20,       // 👈 less bounce
-          mass: 1.6          // 👈 heavier, cinematic feel
-        },
+        y: { duration: 0 },
         rotate: {
           type: "spring",
           stiffness: 35,
-          damping: 22
+          damping: 22,
+          delay: custom.staggerDelay + 0.4
         },
         scale: {
           duration: 0.8,
-          ease: "easeOut"
+          ease: "easeOut",
+          delay: custom.staggerDelay + 0.4
         },
         opacity: {
           duration: 0.6,
-          ease: "easeOut"
+          ease: "easeOut",
+          delay: custom.staggerDelay + 0.4
         },
-        delay: custom.index * 0.18 + 0.4   // 👈 IMPORTANT stagger
       },
     }),
-
   };
 
   const titleVariants = {
@@ -150,46 +146,63 @@ export default function AutocallLanding() {
         </div>
       </header>
 
-      {logos.map((logo) => (
-        <motion.div
-          key={logo.id}
-          className="absolute pointer-events-auto z-10"
-          style={{ left: `${logo.left}%`, transform: 'translateX(-50%)' }}
-          variants={dropVariants}
-          initial="initial"
-          animate="animate"
-          custom={logo}
-        >
+      {logos.map((logo, idx) => {
+        // Map the current index (after shuffle) to fixed positions
+        const mobilePositions = [
+          'top-[12%] left-[8%]',
+          'top-[28%] left-[12%]',
+          'top-[44%] left-[6%]',
+          'top-[60%] left-[14%]',
+          'top-[76%] left-[8%]',
+        ];
+
+        const desktopPositions = [
+          'top-[22%] left-[12%]',
+          'top-[35%] left-[78%]',
+          'top-[48%] left-[8%]',
+          'top-[62%] left-[85%]',
+          'top-[75%] left-[25%]',
+        ];
+
+        return (
           <motion.div
-            className="
-        rounded-full flex items-center justify-center
-        border-4 border-[#337543] bg-[#337543]
-        shadow-2xl relative overflow-hidden
-        w-[110px] h-[110px]
-        md:w-[130px] md:h-[130px]
-        lg:w-[160px] lg:h-[160px]
-      "
-            whileHover={{
-              scale: 1.2,
-              y: -10,
-              boxShadow: '0 0 40px rgba(1, 169, 107, 0.8)',
-              borderColor: '#01ff8a',
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            key={logo.id}
+            className={`
+        absolute pointer-events-auto z-20
+        ${mobilePositions[idx]}
+        md:${desktopPositions[idx]}
+        -translate-x-1/2
+      `}
+            initial={{ opacity: 0, scale: 0.8, rotate: logo.rotateStart }}
+            animate="animate"
+            custom={logo}
+            variants={dropVariants}
           >
-            <span
+            <motion.div
               className="
-          text-white text-center font-black leading-tight
-          text-xs px-3
-          md:text-sm md:px-4
-          lg:text-lg lg:px-6
+          rounded-full flex items-center justify-center
+          border-4 border-[#337543] bg-[#337543]
+          shadow-2xl overflow-hidden backdrop-blur-sm
+          w-[100px] h-[100px]
+          sm:w-[110px] sm:h-[110px]
+          md:w-[130px] md:h-[130px]
+          lg:w-[160px] lg:h-[160px]
         "
+              whileHover={{
+                scale: 1.2,
+                y: -10,
+                boxShadow: '0 0 40px rgba(1, 169, 107, 0.8)',
+                borderColor: '#01ff8a',
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
-              {logo.name}
-            </span>
+              <span className="text-white font-black text-center leading-tight text-xs px-3 md:text-sm lg:text-lg">
+                {logo.name}
+              </span>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      ))}
+        );
+      })}
 
 
       {/* INSET FRAME LINES */}

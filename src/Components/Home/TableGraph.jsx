@@ -575,7 +575,7 @@ const FTSECapitalCharts = () => {
                             }}
                         >
                             <img
-                                src="/2016.png"
+                                src="/2016.jpg"
                                 alt="Decade Performance by Year"
                                 className="w-full h-auto lg:h-130 object-contain"
                             />

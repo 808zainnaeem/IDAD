@@ -532,8 +532,7 @@ const FTSECapitalCharts = () => {
                         className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8"
                     >
                         <h2 className="text-2xl sm:text-2xl text-gray-800 mb-10 text-center bg-gradient-to-r from-emerald-600 to-green-700 text-transparent bg-clip-text">
-                            Monthly Distribution of Annualised Returns (Decade)
-                        </h2>
+                            Decade Performance by Year                      </h2>
 
                         <img src="/chart2.jpg" alt="" />
                     </motion.div>

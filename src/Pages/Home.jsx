@@ -501,3 +501,194 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+// import React, { useEffect, useRef } from "react";
+// import { gsap } from "gsap";
+
+// const AutocallsLogoExact = () => {
+//   const ref = useRef(null);
+
+//   useEffect(() => {
+//     const ctx = gsap.context(() => {
+
+//       /* ========= OUTER RING — 8 YEAR OBSERVATION ROTATION ========= */
+//       gsap.to("#outer-ring", {
+//         rotation: 360,
+//         duration: 64,              // 8 years × 8s
+//         repeat: -1,
+//         ease: "steps(8)",          // 👈 yearly tick feel
+//         transformOrigin: "50% 50%"
+//       });
+
+//       /* ========= INNER RING — 65% BARRIER PULSE ========= */
+//       gsap.to("#inner-ring", {
+//         scale: 1.015,
+//         duration: 3.5,
+//         yoyo: true,
+//         repeat: -1,
+//         ease: "sine.inOut",
+//         transformOrigin: "50% 50%"
+//       });
+
+//       /* ========= A POINTER — MARKET POSITION ========= */
+//       gsap.fromTo(
+//         "#logo-a",
+//         { rotation: -14, scale: 1 },
+//         {
+//           rotation: -8,            // 👈 slightly rotated
+//           scale: 1.015,
+//           duration: 2.8,
+//           yoyo: true,
+//           repeat: -1,
+//           ease: "sine.inOut",
+//           transformOrigin: "50% 50%"
+//         }
+//       );
+
+//       /* ========= YEARLY DIAMOND OBSERVATION GLOW ========= */
+//       gsap.fromTo(
+//         "rect",
+//         { opacity: 0.35 },
+//         {
+//           opacity: 1,
+//           duration: 0.6,
+//           stagger: {
+//             each: 1,
+//             repeat: -1
+//           },
+//           ease: "power1.inOut"
+//         }
+//       );
+
+//     }, ref);
+
+//     return () => ctx.revert();
+//   }, []);
+
+
+//   return (
+//     <svg
+//       ref={ref}
+//       viewBox="0 0 400 460"
+//       width="400"
+//       style={{ display: "block", margin: "auto" }}
+//     >
+//       {/* ========= OUTER GREEN DASHED SEGMENTS (now with larger gaps for clearer dashed look) ========= */}
+//       <g id="outer-ring">
+//         {[...Array(10)].map((_, i) => (
+//           <circle
+//             cx="200"
+//             cy="200"
+//             r="158"
+//             fill="none"
+//             stroke="#1B7F4A"
+//             strokeWidth="26"
+//             strokeLinecap="butt"
+//             strokeDasharray="80 32"
+//           />
+
+//         ))}
+//       </g>
+
+//       {/* ========= BLUE INNER RING ========= */}
+//       <g id="inner-ring">
+//         <circle
+//           cx="200"
+//           cy="200"
+//           r="124"
+//           fill="none"
+//           stroke="#153A63"
+//           strokeWidth="14"
+//         />
+//       </g>
+
+//       {/* ========= 8 DIAMOND TICKS ========= */}
+//       <g>
+//         {[...Array(8)].map((_, i) => (
+//           <rect
+//             key={i}
+//             x="196"
+//             y="92"
+//             width="8"
+//             height="8"
+
+//             fill="#1B7F4A"
+//             transform={`rotate(${i * 45} 200 200) rotate(45 200 96)`}
+//           />
+//         ))}
+//       </g>
+//       <polygon
+//         points="200,275 190,295 210,295"
+//         fill="#153A63"
+//         transform="translate(0,-160)"
+//       />
+
+
+
+//       {/* ========= CENTRAL "A" ========= */}
+//       <g id="logo-a">
+//         {/* A body with wider center space */}
+//         <path
+//           d="
+//       M200 115
+//       L165 240
+//       H190
+//       L200 180
+//       L210 240
+//       H235
+//       Z
+//     "
+//           fill="#153A63"
+//         />
+
+//         {/* Cut-out circle */}
+//         <circle cx="200" cy="210" r="9" fill="#ffffff" />
+//         <circle cx="200" cy="210" r="6" fill="#153A63" />
+//       </g>
+
+
+
+
+//       {/* ========= BOTTOM ARROW ========= */}
+//       <polygon
+//         points="200,290 188,308 212,308"
+//         fill="#1B7F4A"
+//         transform="translate(0,-50)"
+//       />
+
+
+//       {/* ========= TEXT ========= */}
+//       <div>
+
+//         <text
+//           x="200"
+//           y="375"
+//           textAnchor="middle"
+//           fontSize="36"
+//           fontWeight="700"
+//           marginTop="20"
+//           fill="#153A63"
+//         >
+//           Autocalls<tspan fill="#1B7F4A">.uk</tspan>
+//         </text>
+
+//         <text
+//           x="200"
+//           y="410"
+//           textAnchor="middle"
+//           fontSize="22"
+//           fill="#153A63"
+//         >
+//           Precision Investing
+//         </text>
+//       </div>
+
+//     </svg>
+//   );
+// };
+
+// export default AutocallsLogoExact;

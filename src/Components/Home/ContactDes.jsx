@@ -65,7 +65,7 @@ export default function ContactDes() {
                     damping: 15,
                   }}
                   className="inline-flex items-center justify-center w-14 h-14 md:w-20 md:h-20 border-4 border-[#01a96b] rounded-full ml-4 align-middle relative"
-                  style={{}}
+                  style={{ marginLeft: "-18px" }}
                 >
                   <svg
                     className="w-9 h-9 md:w-12 md:h-12 text-[#01a96b]"

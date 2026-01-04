@@ -252,7 +252,13 @@ const FTSECapitalCharts = () => {
             />
         );
     };
-
+    const [animatedData, setAnimatedData] = useState(
+        data.map(item => ({
+            ...item,
+            positiveReturns: 0,
+            returningCapital: 0,
+        }))
+    );
     return (
         <div className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 px-4 py-12">
             <div className="max-w-7xl mx-auto">
@@ -387,11 +393,14 @@ const FTSECapitalCharts = () => {
                     <motion.div
                         initial={{ opacity: 0, x: -100 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, amount: 0.4 }}
+                        viewport={{ once: false, amount: 0.5 }}  // Changed: allow re-trigger if needed
                         transition={{ duration: 1.3, ease: "easeOut" }}
+                        onViewportEnter={() => {
+                            // Trigger bar growth when chart enters view
+                            setAnimatedData(data);
+                        }}
                         className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8"
                     >
-
 
                         {/* Interactive Chart - Hidden on mobile, shown on lg+ */}
                         <div className="hidden lg:block" style={{ width: '100%', height: '80%', padding: '0px 20px', backgroundColor: '#fff' }}>
@@ -401,7 +410,7 @@ const FTSECapitalCharts = () => {
 
                             <ResponsiveContainer width="100%" height={350}>
                                 <ComposedChart
-                                    data={data}
+                                    data={animatedData}  // ← This triggers the animation
                                     margin={{ top: 20, right: 60, bottom: 20, left: 60 }}
                                 >
                                     <CartesianGrid
@@ -487,6 +496,9 @@ const FTSECapitalCharts = () => {
                                         dataKey="positiveReturns"
                                         fill="#333"
                                         barSize={40}
+                                        isAnimationActive={true}
+                                        animationDuration={1600}
+                                        animationEasing="ease-out"
                                     />
 
                                     <Bar
@@ -494,8 +506,11 @@ const FTSECapitalCharts = () => {
                                         dataKey="returningCapital"
                                         fill="#999"
                                         barSize={40}
+                                        isAnimationActive={true}
+                                        animationDuration={1600}
+                                        animationBegin={400}  // Staggered start
+                                        animationEasing="ease-out"
                                     />
-
                                     <Line
                                         yAxisId="right"
                                         type="monotone"
@@ -525,32 +540,72 @@ const FTSECapitalCharts = () => {
                     </motion.div>
 
                     <motion.div
-                        initial={{ opacity: 0, x: 100 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, amount: 0.4 }}
-                        transition={{ duration: 1.3, ease: "easeOut", delay: 0.2 }}
-                        className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8"
+                        initial={{ opacity: 0, y: 80 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{
+                            duration: 1.4,
+                            ease: [0.22, 1, 0.36, 1], // Ultra-smooth modern bezier
+                        }}
+                        className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8 overflow-hidden"
                     >
-                        <h2 className="text-2xl sm:text-2xl text-gray-800 mb-10 text-center bg-gradient-to-r from-emerald-600 to-green-700 text-transparent bg-clip-text">
-                            Decade Performance by Year                      </h2>
+                        <motion.h2
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3, duration: 1, type: "spring", stiffness: 80 }}
+                            className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-12 bg-gradient-to-r from-emerald-600 to-green-700 text-transparent bg-clip-text"
+                        >
+                            Decade Performance by Year
+                        </motion.h2>
 
-                        <img src="/chart2.jpg" alt="" />
+                        {/* Premium Image Reveal Container */}
+                        <motion.div
+                            initial={{ scale: 1.15, filter: "grayscale(70%) brightness(0.9)" }}
+                            whileInView={{ scale: 1, filter: "grayscale(0%) brightness(1)" }}
+                            viewport={{ once: true }}
+
+                            className="relative rounded-2xl overflow-hidden shadow-2xl"
+                            style={{ clipPath: "inset(100% 0 0 0)" }} // Start fully clipped
+                            animate={{ clipPath: "inset(0% 0 0 0)" }} // Reveal from bottom to top
+                            transition={{
+                                duration: 1.6,
+                                ease: [0.25, 0.8, 0.25, 1],
+                                delay: 0.5,
+                            }}
+                        >
+                            <img
+                                src="/2016.png"
+                                alt="Decade Performance by Year"
+                                className="w-full h-auto lg:h-130 object-contain"
+                            />
+
+                            {/* Luxury shine sweep effect */}
+                            <motion.div
+                                initial={{ x: "-100%" }}
+                                whileInView={{ x: "100%" }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1.8, delay: 1, ease: "easeInOut" }}
+                                className="absolute inset-0 pointer-events-none"
+                                style={{
+                                    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
+                                }}
+                            />
+
+                            {/* Subtle floating shadow lift */}
+                            <motion.div
+                                initial={{ y: 20, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.8, duration: 1.2 }}
+                                className="absolute inset-0 rounded-2xl shadow-2xl ring-1 ring-white/20 pointer-events-none"
+                                style={{ background: "radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.08))" }}
+                            />
+                        </motion.div>
                     </motion.div>
 
                 </div>
-                <motion.div
-                    initial={{ opacity: 0, x: 100 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    transition={{ duration: 1.3, ease: "easeOut", delay: 0.2 }}
-                    className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8 mt-10"
-                >
-                    <h2 className="text-2xl sm:text-2xl text-gray-800 mb-10 text-center bg-gradient-to-r from-emerald-600 to-green-700 text-transparent bg-clip-text">
-                        2025 Maturity Performance by Shape
-                    </h2>
 
-                    <img src="/chart3.jpg" alt="" />
-                </motion.div>
             </div>
         </div>
     );

@@ -103,15 +103,20 @@ const Home = () => {
   };
 
   const dropVariants = {
-    initial: { y: -600, opacity: 0, rotate: 0 },
+    initial: { y: -800, opacity: 0 },
     animate: (custom) => ({
       y: 0,
       opacity: 1,
-      rotate: custom.angle || 0,
       transition: {
-        y: { type: 'spring', stiffness: 60, damping: 20, mass: 1.5 },
-        opacity: { duration: 0.8, delay: 0.3 },
-        rotate: { type: 'spring', stiffness: 80, damping: 25, delay: 0.2 },
+        y: {
+          duration: 1,
+          ease: [0.2, 0.8, 0.4, 1], // smooth drop
+          delay: custom.index * 0.25, // This creates sequential drop: 1st → 2nd → 3rd...
+        },
+        opacity: {
+          duration: 0.6,
+          delay: custom.index * 0.25 + 0.3,
+        },
       },
     }),
   };
@@ -321,10 +326,11 @@ const Home = () => {
 
 
         {/* ==================== FLOATING CIRCLES – RESPONSIVE ==================== */}
+        {/* ==================== FLOATING CIRCLES – RESPONSIVE ==================== */}
         <div className="absolute inset-0 pointer-events-none z-10">
           <div className="relative w-full h-full">
 
-            {/* ---------- MOBILE: 2 on top, 3 on bottom at the bottom of screen ---------- */}
+            {/* ---------- MOBILE: 2 on top, 3 on bottom ---------- */}
             <div className="lg:hidden absolute bottom-8 left-0 right-0 px-4">
               <div className="flex flex-col items-center gap-4">
                 {/* Top row: 2 circles */}
@@ -336,14 +342,10 @@ const Home = () => {
                       variants={dropVariants}
                       initial="initial"
                       animate="animate"
-                      custom={{ ...logo, angle: logo.angle ?? 0 }}
+                      custom={{ index: idx }}  // ← Fixed: pass index 0 and 1
                     >
                       <motion.div
-                        className="
-                  rounded-full flex items-center justify-center
-                  border-4 border-[#337543] bg-[#337543]/95
-                  backdrop-blur-sm shadow-xl overflow-hidden
-                "
+                        className="rounded-full flex items-center justify-center border-4 border-[#337543] bg-[#337543]/95 backdrop-blur-sm shadow-xl overflow-hidden"
                         style={{ width: '80px', height: '80px' }}
                         whileHover={{
                           scale: 1.18,
@@ -370,14 +372,10 @@ const Home = () => {
                       variants={dropVariants}
                       initial="initial"
                       animate="animate"
-                      custom={{ ...logo, angle: logo.angle ?? 0 }}
+                      custom={{ index: idx + 2 }}  // ← Fixed: index 2, 3, 4
                     >
                       <motion.div
-                        className="
-                  rounded-full flex items-center justify-center
-                  border-4 border-[#337543] bg-[#337543]/95
-                  backdrop-blur-sm shadow-xl overflow-hidden
-                "
+                        className="rounded-full flex items-center justify-center border-4 border-[#337543] bg-[#337543]/95 backdrop-blur-sm shadow-xl overflow-hidden"
                         style={{ width: '80px', height: '80px' }}
                         whileHover={{
                           scale: 1.18,
@@ -397,23 +395,19 @@ const Home = () => {
               </div>
             </div>
 
-            {/* ---------- DESKTOP: Original large horizontal row at bottom ---------- */}
+            {/* ---------- DESKTOP: Horizontal row ---------- */}
             <div className="hidden lg:flex justify-center items-end gap-10 px-8 absolute bottom-12 left-0 right-0 h-48">
-              {logos.map((logo, idx) => (
+              {logos.map((logo, index) => (
                 <motion.div
-                  key={logo.id ?? idx}
+                  key={logo.id ?? index}
                   className="pointer-events-auto flex-shrink-0"
                   variants={dropVariants}
                   initial="initial"
                   animate="animate"
-                  custom={{ ...logo, angle: logo.angle ?? 0 }}
+                  custom={{ index }}  // ← Fixed: pass index 0 to 4
                 >
                   <motion.div
-                    className="
-              rounded-full flex items-center justify-center
-              border-4 border-[#337543] bg-[#337543]
-              shadow-2xl overflow-hidden
-            "
+                    className="rounded-full flex items-center justify-center border-4 border-[#337543] bg-[#337543] shadow-2xl overflow-hidden"
                     style={{ width: '160px', height: '160px' }}
                     whileHover={{
                       scale: 1.2,

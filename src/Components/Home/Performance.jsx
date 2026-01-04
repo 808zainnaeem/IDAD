@@ -235,19 +235,7 @@ export default function Performance() {
               </motion.div>
             ))}
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 1.3, ease: "easeOut", delay: 0.2 }}
-            className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8 mt-10 mb-10"
-          >
-            <h2 className="text-2xl sm:text-2xl text-gray-800 mb-10 text-center bg-gradient-to-r from-emerald-600 to-green-700 text-transparent bg-clip-text">
-              2025 Maturity Performance by Shape
-            </h2>
 
-            <img src="/chart3.jpg" alt="" className='w-full h-auto lg:h-120 object-contain' />
-          </motion.div>
           {/* Insights + Chart Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
             {/* Left: Key Metrics */}
@@ -304,6 +292,20 @@ export default function Performance() {
               </div>
             </motion.div>
           </div>
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 1.3, ease: "easeOut", delay: 0.2 }}
+            className="bg-white rounded-3xl shadow-2xl border border-gray-200 p-6 sm:p-8 mt-10 mb-10"
+          >
+            <h3 className="text-3xl font-bold text-gray-900 mb-8 border-b-2 border-[#01a96b] pb-4 inline-block">
+              2025 Maturity Performance by Shape
+            </h3>
+
+
+            <img src="/chart3.jpg" alt="" className='w-full h-auto lg:h-120 object-contain' />
+          </motion.div>
 
           {/* CTA */}
           <motion.div

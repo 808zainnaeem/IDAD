@@ -581,7 +581,7 @@ const FTSECapitalCharts = () => {
                             />
 
                             {/* Luxury shine sweep effect */}
-                            <motion.div
+                            {/* <motion.div
                                 initial={{ x: "-100%" }}
                                 whileInView={{ x: "100%" }}
                                 viewport={{ once: true }}
@@ -590,17 +590,17 @@ const FTSECapitalCharts = () => {
                                 style={{
                                     background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
                                 }}
-                            />
+                            /> */}
 
                             {/* Subtle floating shadow lift */}
-                            <motion.div
+                            {/* <motion.div
                                 initial={{ y: 20, opacity: 0 }}
                                 whileInView={{ y: 0, opacity: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: 0.8, duration: 1.2 }}
                                 className="absolute inset-0 rounded-2xl shadow-2xl ring-1 ring-white/20 pointer-events-none"
                                 style={{ background: "radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.08))" }}
-                            />
+                            /> */}
                         </motion.div>
                     </motion.div>
 

@@ -45,17 +45,9 @@ const Home = () => {
     const timer = setTimeout(() => setIsLoading(false), 3000);
     return () => clearTimeout(timer);
   }, []);
-
   useEffect(() => {
-    logoData.forEach((logo, index) => {
-      const delay = index * 300 + Math.random() * 400;
-      setTimeout(() => {
-        setLogos((prev) => [
-          ...prev,
-          { ...logo, id: index },
-        ]);
-      }, delay);
-    });
+    // Add ALL 5 circles immediately so the layout doesn't shift
+    setLogos(logoData.map((logo, index) => ({ ...logo, id: index })));
   }, []);
 
   useEffect(() => {
@@ -103,19 +95,24 @@ const Home = () => {
   };
 
   const dropVariants = {
-    initial: { y: -800, opacity: 0 },
+    initial: {
+      y: -800,
+      opacity: 0,
+      x: 0  // locks horizontal position
+    },
     animate: (index) => ({
       y: 0,
       opacity: 1,
+      x: 0,  // keeps it locked
       transition: {
         y: {
-          duration: 1,
+          duration: 1.2,
           ease: [0.2, 0.8, 0.4, 1],
-          delay: index * 0.25,
+          delay: index * 0.22,  // nice sequential timing
         },
         opacity: {
-          duration: 0.6,
-          delay: index * 0.25 + 0.3,
+          duration: 0.8,
+          delay: index * 0.22 + 0.4,
         },
       },
     }),

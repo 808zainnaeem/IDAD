@@ -104,22 +104,23 @@ const Home = () => {
 
   const dropVariants = {
     initial: { y: -800, opacity: 0 },
-    animate: (custom) => ({
+    animate: (index) => ({
       y: 0,
       opacity: 1,
       transition: {
         y: {
           duration: 1,
-          ease: [0.2, 0.8, 0.4, 1], // smooth drop
-          delay: custom.index * 0.25, // This creates sequential drop: 1st → 2nd → 3rd...
+          ease: [0.2, 0.8, 0.4, 1],
+          delay: index * 0.25,
         },
         opacity: {
           duration: 0.6,
-          delay: custom.index * 0.25 + 0.3,
+          delay: index * 0.25 + 0.3,
         },
       },
     }),
   };
+
 
   const titleVariants = {
     hidden: { opacity: 0, y: 100 },
@@ -342,7 +343,8 @@ const Home = () => {
                       variants={dropVariants}
                       initial="initial"
                       animate="animate"
-                      custom={{ index: idx }}  // ← Fixed: pass index 0 and 1
+                      custom={idx}
+                    // ← Fixed: pass index 0 and 1
                     >
                       <motion.div
                         className="rounded-full flex items-center justify-center border-4 border-[#337543] bg-[#337543]/95 backdrop-blur-sm shadow-xl overflow-hidden"
@@ -404,8 +406,7 @@ const Home = () => {
                   variants={dropVariants}
                   initial="initial"
                   animate="animate"
-                  custom={{ index }}  // ← Fixed: pass index 0 to 4
-                >
+                  custom={index}                >
                   <motion.div
                     className="rounded-full flex items-center justify-center border-4 border-[#337543] bg-[#337543] shadow-2xl overflow-hidden"
                     style={{ width: '160px', height: '160px' }}
